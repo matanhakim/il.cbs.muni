@@ -1,10 +1,12 @@
 Package: il.cbs.muni
-Title: What the Package Does (One Line, Title Case)
+Title: Utility functions to Work with Israeli Central Bureau of Statistics Municipal Data
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+    person("Matan", "Hakim", , "matanhakim@gmail.com", role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0009-0002-9372-8975"))
+Description: Analyst oriented utility functions to handle the different quirks of
+  the Israeli CBS municipal data, harmonize id's and bring together data points
+  from different years.
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
 Encoding: UTF-8
