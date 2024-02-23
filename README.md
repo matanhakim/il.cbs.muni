@@ -22,8 +22,8 @@ devtools::install_github("matanhakim/il.cbs.muni")
 
 ## Example
 
-Let’s say we would like to work with the (2021 yishuvim
-data)\[<https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2021.xlsx>\]
+Let’s say we would like to work with the [2021 yishuvim
+data](https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2021.xlsx)
 (‘yishuvim’ = points of residence) of the Israeli CBS. We will read the
 first two columns:
 
