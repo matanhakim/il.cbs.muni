@@ -7,8 +7,7 @@ Authors@R:
 Description: Analyst oriented utility functions to handle the different quirks of
   the Israeli CBS municipal data, harmonize id's and bring together data points
   from different years.
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
