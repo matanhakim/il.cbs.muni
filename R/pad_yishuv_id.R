@@ -11,6 +11,9 @@
 #' x <- c(1, "23", "4000", 5600)
 #' pad_yishuv_id(x)
 pad_yishuv_id <- function(yishuv_id) {
-  stopifnot(is.character(yishuv_id), max(stringr::str_length(yishuv_id)) <= 4)
+  stopifnot(
+    is.character(yishuv_id) | is.numeric(yishuv_id),
+    max(stringr::str_length(yishuv_id)) <= 4
+  )
   stringr::str_pad(yishuv_id, width = 4, side = "left", pad = "0")
 }
