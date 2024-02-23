@@ -38,7 +38,7 @@ Let's say we would like to work with the (2021 yishuvim data)[https://www.cbs.go
 ```{r}
 library(il.cbs.muni)
 library(readxl)
-library(dplyr)
+suppressMessages(library(dplyr))
 
 # This is the specific path to the file in this package, but you can store it
 # anywhere you want.
@@ -61,7 +61,7 @@ df_yishuvim <- df_yishuvim |>
 df_yishuvim
 ```
 
-Now every yishuv id is a string exactly 4 caharcters long.
+Now every yishuv id is a string exactly 4 characters long.
 
 We can verify this:
 

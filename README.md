@@ -30,15 +30,7 @@ first two columns:
 ``` r
 library(il.cbs.muni)
 library(readxl)
-library(dplyr)
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
+suppressMessages(library(dplyr))
 
 # This is the specific path to the file in this package, but you can store it
 # anywhere you want.
@@ -96,7 +88,7 @@ df_yishuvim
 #> # ℹ 1,473 more rows
 ```
 
-Now every yishuv id is a string exactly 4 caharcters long.
+Now every yishuv id is a string exactly 4 characters long.
 
 We can verify this:
 
