@@ -61,15 +61,18 @@ df_yishuvim
 #> # ℹ 1,473 more rows
 ```
 
-As you can see, the id column has two problems: 1. It’s a numeric
-vector. This is problematic as our convention for an id throughout the
-il.verse is to have id’s as characters. 2. Each yishuv id has a
-different length, ranging between 1-4. This is problematic since there
-is no difference between `67` and `0067`, and creates potential clashes
-between some cities and regional councils when working with municipal
-data. For example, `31` is the **yishuv** id of Ofakim, but also the
-**municipal** id of Nahal Sorek regional council. Therefore, the
-convention is to use 4-character-long id for **every** yishuv.
+As you can see, the id column has two problems:
+
+1.  It’s a numeric vector. This is problematic as our convention for an
+    id throughout the il.verse is to have id’s as characters.
+
+2.  Each yishuv id has a different length, ranging between 1-4. This is
+    problematic since there is no difference between `67` and `0067`,
+    and creates potential clashes between some cities and regional
+    councils when working with municipal data. For example, `31` is the
+    **yishuv** id of Ofakim, but also the **municipal** id of Nahal
+    Sorek regional council. Therefore, the convention is to use
+    4-character-long id for **every** yishuv.
 
 using the `pad_yishuv_id()` function, we can fix this problem:
 
