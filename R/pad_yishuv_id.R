@@ -1,4 +1,4 @@
-#' Pad a yishuv id
+#' Pad a yishuv id to a 4-digit character vector
 #'
 #' @param yishuv_id a character vector containing only characters and numbers, where each
 #' element is no longer than 4 characters or digits.

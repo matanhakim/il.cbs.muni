@@ -2,7 +2,7 @@
 % Please edit documentation in R/pad_yishuv_id.R
 \name{pad_yishuv_id}
 \alias{pad_yishuv_id}
-\title{Pad a yishuv id}
+\title{Pad a yishuv id to a 4-digit character vector}
 \usage{
 pad_yishuv_id(yishuv_id)
 }
@@ -15,7 +15,7 @@ A character or numeric vector, where each element is 4 characters long,
 containing only numbers and left-padded with 0's.
 }
 \description{
-Pad a yishuv id
+Pad a yishuv id to a 4-digit character vector
 }
 \examples{
 x <- c(1, "23", "4000", 5600)
