@@ -1,6 +1,7 @@
 #' Pad a yishuv id
 #'
-#' @param yishuv_id
+#' @param yishuv_id a vector containing only characters and numbers, where each
+#' element is no longer than 4 characters or digits.
 #'
 #' @return A character vector, where each element is 4 characters long,
 #' containing only numbers and left-padded with 0's.

@@ -7,7 +7,8 @@
 pad_yishuv_id(yishuv_id)
 }
 \arguments{
-\item{yishuv_id}{}
+\item{yishuv_id}{a vector containing only characters and numbers, where each
+element is no longer than 4 characters or digits.}
 }
 \value{
 A character vector, where each element is 4 characters long,
