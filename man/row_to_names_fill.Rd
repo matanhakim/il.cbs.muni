@@ -51,6 +51,8 @@ df <- data.frame(
   c = letters[1:6]
 )
 
+df
+
 row_to_names_fill(df, 2:3)
 row_to_names_fill(df, 2:3, sep = ".")
 row_to_names_fill(df, 2:4, fill_missing = c(TRUE, FALSE, FALSE))
