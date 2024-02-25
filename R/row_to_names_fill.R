@@ -1,4 +1,5 @@
-  row_to_names_fill <- function(data, row_number, fill_missing = TRUE, remove_row = TRUE,
+#' @importFrom rlang .data
+row_to_names_fill <- function(data, row_number, fill_missing = TRUE, remove_row = TRUE,
                           remove_rows_above = TRUE, sep = "_") {
     col_names <- purrr::map2(
       row_number,
@@ -8,7 +9,7 @@
       dplyr::bind_cols() |>
       suppressMessages() |>
       tidyr::unite(col = "var_names", sep = sep, na.rm = TRUE) |>
-      dplyr::pull(var_names)
+      dplyr::pull("var_names")
 
     if (remove_row) {
       data <- data |>
@@ -29,14 +30,14 @@
     data <- data |>
       dplyr::slice(row_number) |>
       dplyr::mutate(dplyr::across(dplyr::everything(), as.character)) |>
-      tidyr::pivot_longer(dplyr::everything()) |>
-      dplyr::select(value)
+      tidyr::pivot_longer(dplyr::everything(), values_to = "value") |>
+      dplyr::select("value")
 
     if (fill_missing) {
       data <- data |>
-        tidyr::fill(value)
+        tidyr::fill("value")
     }
 
     data |>
-      dplyr::pull(value)
+      dplyr::pull("value")
   }
