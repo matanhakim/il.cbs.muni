@@ -21,7 +21,7 @@ test_that("fill and cast rows to names of a data frame and keeps data well", {
 })
 
 test_that("fill and cast rows to names of a data frame in a real data set", {
-  df_1 <- readxl::read_excel(here::here("inst/extdata/p_libud_2021.xlsx"), sheet = 2, col_types = "text", col_names = FALSE) |>
+  df_1 <- readxl::read_excel(system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"), sheet = 2, col_types = "text", col_names = FALSE) |>
     suppressMessages()
   expect_equal(
     row_to_names_fill(df_1, 4:5, fill_missing = c(TRUE, FALSE)) |> names() |> dplyr::nth(20),

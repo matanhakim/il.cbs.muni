@@ -14,11 +14,10 @@ RoxygenNote: 7.2.3
 Imports: 
     dplyr,
     purrr,
-    readxl,
     stringr,
     tidyr
 Suggests: 
-    here,
+    readxl,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 URL: https://github.com/matanhakim/il.cbs.muni,
