@@ -3,7 +3,7 @@
 #' @param name a character vector
 #'
 #' @return a character vector without leading and trailing white space, and with
-#' characters that are only letters, excluding the following: `'-()"`
+#' characters that are only letters and digits, excluding the following: `'-()"`
 #' @export
 #'
 #' @examples
@@ -13,6 +13,6 @@
 clean_name <- function(name) {
   stopifnot(is.character(name))
   name |>
-    stringr::str_remove_all("[[:punct:][:symbol:][:digit:]&&[^'\\-()\"]]") |>
+    stringr::str_remove_all("[[:punct:][:symbol:]&&[^'\\-()\"]]") |>
     stringr::str_squish()
 }

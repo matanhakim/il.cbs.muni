@@ -11,7 +11,7 @@ clean_name(name)
 }
 \value{
 a character vector without leading and trailing white space, and with
-characters that are only letters, excluding the following: \verb{'-()"}
+characters that are only letters and digits, excluding the following: \verb{'-()"}
 }
 \description{
 Clean a string from characters unwanted in (mostly) yishuv names
