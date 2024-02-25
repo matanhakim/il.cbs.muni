@@ -85,41 +85,58 @@ the fill utility.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>a data frame.</p></dd>
+<dd><p>A data frame.</p></dd>
 
 
 <dt>row_number</dt>
-<dd><p>a numeric vector with he row indices of <code>data</code> containing the
+<dd><p>A numeric vector with he row indices of <code>data</code> containing the
 variable names. Allows for multiple rows input as a numeric vector. If multiple
 rows, values in the same column would be pasted with the <code>sep</code> argument as a
 separator. NA's are ignored.</p></dd>
 
 
 <dt>fill_missing</dt>
-<dd><p>a logical vector of length 1 or of length <code>length(row_number)</code>.
-every value in the vector denotes for the matching row in <code>data[row_number, ]</code> if
-the row should fill missing values (from left to right). if <code>TRUE</code> for a row,
+<dd><p>A logical vector of length 1 or of length <code>length(row_number)</code>.
+Every value in the vector denotes for the matching row in <code>data[row_number, ]</code> if
+the row should fill missing values (from left to right). If <code>TRUE</code> for a row,
 all missing values following a non-missing value will be replaced with that
 preceding non-missing value.</p></dd>
 
 
 <dt>remove_row</dt>
-<dd><p>a logical vector of length 1, denoting if the row <code>row_number</code>
+<dd><p>A logical vector of length 1, denoting if the row <code>row_number</code>
 should be removed from the resulting data.frame.</p></dd>
 
 
 <dt>remove_rows_above</dt>
-<dd><p>a logical vector of length 1, denoting if the rows above
+<dd><p>A logical vector of length 1, denoting if the rows above
 <code>row_number</code> - that is, between <code>1:(row_number-1)</code> - should be removed
 from the resulting data.frame, in the case that <code>row_number != 1</code>.</p></dd>
 
 
 <dt>sep</dt>
-<dd><p>a character vector of length 1 to separate the values in the case of
+<dd><p>A character vector of length 1 to separate the values in the case of
 multiple rows input to <code>row_number</code>.</p></dd>
 
 </dl></div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  a <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>,</span></span>
+<span class="r-in"><span>  b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="cn">NA</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  c <span class="op">=</span> <span class="va">letters</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">row_to_names_fill</span><span class="op">(</span><span class="va">df_1</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in row_to_names_fill(df_1, 2:3):</span> could not find function "row_to_names_fill"</span>
+<span class="r-in"><span><span class="fu">row_to_names_fill</span><span class="op">(</span><span class="va">df_1</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">3</span>, sep <span class="op">=</span> <span class="st">"."</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in row_to_names_fill(df_1, 2:3, sep = "."):</span> could not find function "row_to_names_fill"</span>
+<span class="r-in"><span><span class="fu">row_to_names_fill</span><span class="op">(</span><span class="va">df_1</span>, <span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, fill_missing <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in row_to_names_fill(df_1, 2:4, fill_missing = c(TRUE, FALSE, FALSE)):</span> could not find function "row_to_names_fill"</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
 
