@@ -36,9 +36,9 @@
 #'   c = letters[1:6]
 #' )
 #'
-#' row_to_names_fill(df_1, 2:3)
-#' row_to_names_fill(df_1, 2:3, sep = ".")
-#' row_to_names_fill(df_1, 2:4, fill_missing = c(TRUE, FALSE, FALSE))
+#' row_to_names_fill(df, 2:3)
+#' row_to_names_fill(df, 2:3, sep = ".")
+#' row_to_names_fill(df, 2:4, fill_missing = c(TRUE, FALSE, FALSE))
 #'
 #' @importFrom rlang .data
 row_to_names_fill <- function(data, row_number, fill_missing = TRUE, remove_row = TRUE,
