@@ -2,7 +2,7 @@
 % Please edit documentation in R/row_to_names_fill.R
 \name{row_to_names_fill}
 \alias{row_to_names_fill}
-\title{Elevate rows to be the column names of a data.frame and fill row-wise if needed.}
+\title{Elevate rows to be the column names of a data.frame and fill row-wise if needed}
 \usage{
 row_to_names_fill(
   data,

@@ -1,4 +1,4 @@
-#' Elevate rows to be the column names of a data.frame and fill row-wise if needed.
+#' Elevate rows to be the column names of a data.frame and fill row-wise if needed
 #'
 #' Casts data from rows to the column names of a data frame, with the option to fill
 #' missing values row-wise. This utility is helpful in the case of merged cells in
