@@ -27,6 +27,17 @@
 #' @param sep a character vector of length 1 to separate the values in the case of
 #' multiple rows input to `row_number`.
 #'
+#' @examples
+#' df <- data.frame(
+#'   a = 1:6,
+#'   b = rep(c("x", NA), 3),
+#'   c = letters[1:6]
+#' )
+#'
+#' row_to_names_fill(df_1, 2:3)
+#' row_to_names_fill(df_1, 2:3, sep = ".")
+#' row_to_names_fill(df_1, 2:4, fill_missing = c(TRUE, FALSE, FALSE))
+#'
 #' @importFrom rlang .data
 row_to_names_fill <- function(data, row_number, fill_missing = TRUE, remove_row = TRUE,
                           remove_rows_above = TRUE, sep = "_") {
