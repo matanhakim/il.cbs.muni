@@ -18,27 +18,27 @@ row_to_names_fill(
 )
 }
 \arguments{
-\item{data}{a data frame.}
+\item{data}{A data frame.}
 
-\item{row_number}{a numeric vector with he row indices of \code{data} containing the
+\item{row_number}{A numeric vector with he row indices of \code{data} containing the
 variable names. Allows for multiple rows input as a numeric vector. If multiple
 rows, values in the same column would be pasted with the \code{sep} argument as a
 separator. NA's are ignored.}
 
-\item{fill_missing}{a logical vector of length 1 or of length \code{length(row_number)}.
-every value in the vector denotes for the matching row in \code{data[row_number, ]} if
-the row should fill missing values (from left to right). if \code{TRUE} for a row,
+\item{fill_missing}{A logical vector of length 1 or of length \code{length(row_number)}.
+Every value in the vector denotes for the matching row in \code{data[row_number, ]} if
+the row should fill missing values (from left to right). If \code{TRUE} for a row,
 all missing values following a non-missing value will be replaced with that
 preceding non-missing value.}
 
-\item{remove_row}{a logical vector of length 1, denoting if the row \code{row_number}
+\item{remove_row}{A logical vector of length 1, denoting if the row \code{row_number}
 should be removed from the resulting data.frame.}
 
-\item{remove_rows_above}{a logical vector of length 1, denoting if the rows above
+\item{remove_rows_above}{A logical vector of length 1, denoting if the rows above
 \code{row_number} - that is, between \code{1:(row_number-1)} - should be removed
 from the resulting data.frame, in the case that \code{row_number != 1}.}
 
-\item{sep}{a character vector of length 1 to separate the values in the case of
+\item{sep}{A character vector of length 1 to separate the values in the case of
 multiple rows input to \code{row_number}.}
 }
 \description{
@@ -47,4 +47,16 @@ missing values row-wise. This utility is helpful in the case of merged cells in
 Microsoft Excel, where the merged range has data only in the first (unmerged) cell.
 This function is similar to \code{janitor::row_to_names()}, with the exception of
 the fill utility.
+}
+\examples{
+df <- data.frame(
+  a = 1:6,
+  b = rep(c("x", NA), 3),
+  c = letters[1:6]
+)
+
+row_to_names_fill(df_1, 2:3)
+row_to_names_fill(df_1, 2:3, sep = ".")
+row_to_names_fill(df_1, 2:4, fill_missing = c(TRUE, FALSE, FALSE))
+
 }

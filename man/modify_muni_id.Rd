@@ -7,15 +7,15 @@
 modify_muni_id(muni_id, yishuv_id)
 }
 \arguments{
-\item{muni_id}{a character or numeric vector indicating the municipal status,
+\item{muni_id}{A character or numeric vector indicating the municipal status,
 where "0" or "99" represents a city or a local council, and every other two-digit
 number or character represents a regional council.}
 
-\item{yishuv_id}{a character or numeric vector representing the yishuv id.
-should be 4 digits long according to the il.verse conventions.}
+\item{yishuv_id}{A character or numeric vector representing the yishuv id.
+Should be 4 digits long according to the il.verse conventions.}
 }
 \value{
-a character vector with 4 digits municipal id for cities and local councils
+A character vector with 4 digits municipal id for cities and local councils
 and 2 digits municipal id for regional councils.
 }
 \description{

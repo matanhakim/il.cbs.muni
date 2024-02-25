@@ -1,12 +1,12 @@
 #' Modify a municipal id depending on the municipal status and yishuv id
 #'
-#' @param muni_id a character or numeric vector indicating the municipal status,
+#' @param muni_id A character or numeric vector indicating the municipal status,
 #' where "0" or "99" represents a city or a local council, and every other two-digit
 #' number or character represents a regional council.
-#' @param yishuv_id a character or numeric vector representing the yishuv id.
-#' should be 4 digits long according to the il.verse conventions.
+#' @param yishuv_id A character or numeric vector representing the yishuv id.
+#' Should be 4 digits long according to the il.verse conventions.
 #'
-#' @return a character vector with 4 digits municipal id for cities and local councils
+#' @return A character vector with 4 digits municipal id for cities and local councils
 #' and 2 digits municipal id for regional councils.
 #' @export
 #'
