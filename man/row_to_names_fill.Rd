@@ -2,11 +2,7 @@
 % Please edit documentation in R/row_to_names_fill.R
 \name{row_to_names_fill}
 \alias{row_to_names_fill}
-\title{Casts data from rows to the column names of a data frame, with the option to fill
-missing values row-wise. This utility is helpful in the case of merged cells in
-Microsoft Excel, where the merged range has data only in the first (unmerged) cell.
-This function is similar to \code{janitor::row_to_names()}, with the exception of
-the fill utility.}
+\title{Elevate rows to be the column names of a data.frame and fill row-wise if needed.}
 \usage{
 row_to_names_fill(
   data,
