@@ -86,7 +86,7 @@
 <span></span>
 <span><span class="co"># This is the specific path to the file in this package, but you can store it</span></span>
 <span><span class="co"># anywhere you want.</span></span>
-<span><span class="va">df_yishuvim</span> <span class="op">&lt;-</span> <span class="fu">read_excel</span><span class="op">(</span><span class="st">"inst/extdata/bycode2021.xlsx"</span>, range <span class="op">=</span> <span class="fu">cell_cols</span><span class="op">(</span><span class="st">"A:B"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">df_yishuvim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_excel</a></span><span class="op">(</span><span class="st">"inst/extdata/bycode2021.xlsx"</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/cellranger/man/cell_cols.html" class="external-link">cell_cols</a></span><span class="op">(</span><span class="st">"A:B"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>yishuv_name <span class="op">=</span> <span class="fl">1</span>, yishuv_id <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">df_yishuvim</span></span>
 <span><span class="co">#&gt; # A tibble: 1,483 × 2</span></span>
