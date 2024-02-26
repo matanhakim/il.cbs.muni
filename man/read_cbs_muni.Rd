@@ -4,7 +4,7 @@
 \alias{read_cbs_muni}
 \title{Read a municipal data file to a tibble}
 \usage{
-read_cbs_muni(path, year, data_domain = c("physical", "budget"))
+read_cbs_muni(path, year, data_domain = c("physical", "budget"), cols = NULL)
 }
 \arguments{
 \item{path}{A character vector of length 1, denoting the local file path to the
@@ -18,12 +18,16 @@ pointed in \code{path} is for. Currently supporting only 2016 and later, since b
 \item{data_domain}{A character vector of length 1, one of \code{c("physical", "budget")}.
 Every Excel municipal data file has a few different data domains, most notably
 physical and population data, and budget data.}
+
+\item{cols}{<\href{https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html}{tidy-select}>
+Columns to keep. The default \code{NULL} keeps all columns.}
 }
 \value{
 A tibble with municipal data for a specific year, where every row is a
 municipality and every column is a different variable for this municipality in
 that year. Be advised all columns are of type character, so you nee to parse
-the data types yourself at will.
+the data types yourself at will. Column names are merged from the relevant headers,
+and only single whitespaces are kept.
 }
 \description{
 This function is a wrapper around \code{readxl::readexcel()}, reading a specific

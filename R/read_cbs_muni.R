@@ -14,11 +14,14 @@
 #' @param data_domain A character vector of length 1, one of `c("physical", "budget")`.
 #' Every Excel municipal data file has a few different data domains, most notably
 #' physical and population data, and budget data.
+#' @param cols <[tidy-select](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)>
+#'  Columns to keep. The default `NULL` keeps all columns.
 #'
 #' @return A tibble with municipal data for a specific year, where every row is a
 #' municipality and every column is a different variable for this municipality in
 #' that year. Be advised all columns are of type character, so you nee to parse
-#' the data types yourself at will.
+#' the data types yourself at will. Column names are merged from the relevant headers,
+#' and only single whitespaces are kept.
 #' @export
 #' @md
 #'
@@ -32,11 +35,11 @@
 #' df |>
 #'   dplyr::select(1:15) |>
 #'   dplyr::glimpse()
-read_cbs_muni <- function(path, year, data_domain = c("physical", "budget")) {
+read_cbs_muni <- function(path, year, data_domain = c("physical", "budget"), cols = NULL) {
   params <- df_cbs_muni_params |>
     dplyr::filter(year == {{ year }}, data_domain == {{ data_domain }})
 
-  readxl::read_excel(
+  df <- readxl::read_excel(
     path = path,
     sheet = params$sheet_number,
     col_names = FALSE,
@@ -47,4 +50,15 @@ read_cbs_muni <- function(path, year, data_domain = c("physical", "budget")) {
     row_number = unlist(params$col_names_row_number),
     fill_missing = unlist(params$fill_missing)
   )
+
+  if (!rlang::quo_is_null(rlang::enquo(cols))) {
+    df <- df |>
+      dplyr::select({{ cols }})
+  }
+
+    names(df) <- df |>
+      names() |>
+      stringr::str_squish()
+
+    df
 }
