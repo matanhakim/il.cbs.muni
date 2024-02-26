@@ -18,8 +18,8 @@ municipal data file. A full list of available files by the CBS is at the
 \href{https://www.cbs.gov.il/he/publications/Pages/2019/\%D7\%94\%D7\%A8\%D7\%A9\%D7\%95\%D7\%99\%D7\%95\%D7\%AA-\%D7\%94\%D7\%9E\%D7\%A7\%D7\%95\%D7\%9E\%D7\%99\%D7\%95\%D7\%AA-\%D7\%91\%D7\%99\%D7\%A9\%D7\%A8\%D7\%90\%D7\%9C-\%D7\%A7\%D7\%95\%D7\%91\%D7\%A6\%D7\%99-\%D7\%A0\%D7\%AA\%D7\%95\%D7\%A0\%D7\%99\%D7\%9D-\%D7\%9C\%D7\%A2\%D7\%99\%D7\%91\%D7\%95\%D7\%93-1999-2017.aspx}{relevant CBS page}.}
 
 \item{year}{A numeric vector of length 1 denoting which year the data file
-pointed in \code{path} is for. Currently supporting only 2016 and later, since before
-2016 regional councils are split from cities and local councils.}
+pointed in \code{path} is for. Currently supporting only 2003 and later, since before
+2003 the data structure is very different.}
 
 \item{muni_type}{A character vector of length 1, one of
 \code{c("all", "city_lc", "rc")}. Since 2016, all municipal types are bundled together
