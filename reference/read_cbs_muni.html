@@ -57,7 +57,7 @@ every year and its specific quirks in the Excel headers.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_cbs_muni</span><span class="op">(</span><span class="va">path</span>, <span class="va">year</span>, data_domain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"physical"</span>, <span class="st">"budget"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_cbs_muni</span><span class="op">(</span><span class="va">path</span>, <span class="va">year</span>, data_domain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"physical"</span>, <span class="st">"budget"</span><span class="op">)</span>, cols <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -79,6 +79,11 @@ pointed in <code>path</code> is for. Currently supporting only 2016 and later, s
 Every Excel municipal data file has a few different data domains, most notably
 physical and population data, and budget data.</p></dd>
 
+
+<dt>cols</dt>
+<dd><p>&lt;<a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html" class="external-link">tidy-select</a>&gt;
+Columns to keep. The default <code>NULL</code> keeps all columns.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -87,7 +92,8 @@ physical and population data, and budget data.</p></dd>
 <p>A tibble with municipal data for a specific year, where every row is a
 municipality and every column is a different variable for this municipality in
 that year. Be advised all columns are of type character, so you nee to parse
-the data types yourself at will.</p>
+the data types yourself at will. Column names are merged from the relevant headers,
+and only single whitespaces are kept.</p>
     </div>
 
     <div class="section level2">
@@ -103,7 +109,7 @@ the data types yourself at will.</p>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 255</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Columns: 15</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם  הרשות`                                                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "א…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם הרשות`                                                          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "א…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_סמל הרשות`                                                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ כללי_מחוז                                                           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "ח…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_מעמד מוניציפלי`                                               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "ע…</span>
@@ -113,11 +119,11 @@ the data types yourself at will.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_מספר חברי מועצה`                                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_סמל ועדת תכנון ובנייה`                                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "3…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_שם ועדת תכנון ובנייה`                                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "ע…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_שטח \r\n(קמ"ר)`                                               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_שטח (קמ"ר)`                                                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `דמוגרפיה_צפיפות אוכלוסייה לקמ''ר ביישובים שמנו 5,000 תושבים ויותר` <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ `דמוגרפיה_סה"כ  אוכלוסייה בסוף השנה`                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "5…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `דמוגרפיה_סה"כ אוכלוסייה בסוף השנה`                                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "5…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `דמוגרפיה_יהודים ואחרים (אחוזים)`                                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "-…</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $ `דמוגרפיה_יהודים \r\n(אחוזים מתוך יהודים ואחרים)`                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `דמוגרפיה_יהודים (אחוזים מתוך יהודים ואחרים)`                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "-…</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
