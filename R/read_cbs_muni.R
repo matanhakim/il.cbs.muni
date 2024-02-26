@@ -1,3 +1,36 @@
+#' Title Read a municipal data file to a tibble
+#'
+#' This function is a wrapper around `readxl::readexcel()`, reading a specific
+#' municipal data file for a specific year and a specific data domain. Its added
+#' value is in its use of `row_to_names_fill()` and its pre-defined parameters for
+#' every year and its specific quirks in the Excel headers.
+#'
+#' @param path A character vector of length 1, denoting the local file path to the
+#'  municipal data file. A full list of available files by the CBS is at
+#' https://www.cbs.gov.il/he/publications/Pages/2019/%D7%94%D7%A8%D7%A9%D7%95%D7%99%D7%95%D7%AA-%D7%94%D7%9E%D7%A7%D7%95%D7%9E%D7%99%D7%95%D7%AA-%D7%91%D7%99%D7%A9%D7%A8%D7%90%D7%9C-%D7%A7%D7%95%D7%91%D7%A6%D7%99-%D7%A0%D7%AA%D7%95%D7%A0%D7%99%D7%9D-%D7%9C%D7%A2%D7%99%D7%91%D7%95%D7%93-1999-2017.aspx
+#' @param year A numeric vector of length 1 denoting which year the data file
+#' pointed in `path` is for. Currently supporting only 2016 and later, since before
+#' 2016 regional councils are split from cities and local councils.
+#' @param data_domain A character vector of length 1, one of `c("physical", "budget")`.
+#' Every Excel municipal data file has a few different data domains, most notably
+#' physical and population data, and budget data.
+#'
+#' @return A tibble with municipal data for a specific year, where every row is a
+#' municipality and every column is a different variable for this municipality in
+#' that year. Be advised all columns are of type character, so you nee to parse
+#' the data types yourself at will.
+#' @export
+#'
+#' @examples
+#' df <- read_cbs_muni(
+#'   system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+#'   year = 2021,
+#'   data_domain = "physical"
+#' )
+#'
+#' df |>
+#'   head() |>
+#'   str()
 read_cbs_muni <- function(path, year, data_domain = c("physical", "budget")) {
   params <- df_cbs_muni_params |>
     dplyr::filter(year == {{ year }}, data_domain == {{ data_domain }})
@@ -5,7 +38,8 @@ read_cbs_muni <- function(path, year, data_domain = c("physical", "budget")) {
   readxl::read_excel(
     path = path,
     sheet = params$sheet_number,
-    col_names = FALSE
+    col_names = FALSE,
+    col_types = "text"
   ) |>
   suppressMessages() |>
   row_to_names_fill(

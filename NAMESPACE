@@ -3,5 +3,6 @@
 export(clean_name)
 export(modify_muni_id)
 export(pad_yishuv_id)
+export(read_cbs_muni)
 export(row_to_names_fill)
 importFrom(rlang,.data)
