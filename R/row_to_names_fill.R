@@ -53,7 +53,7 @@ row_to_names_fill <- function(data, row_number, fill_missing = TRUE, remove_row 
 
     if (remove_row) {
       data <- data |>
-        dplyr::slice(-row_number)
+        dplyr::slice(-(min(row_number):max(row_number)))
     }
 
     if (remove_rows_above & min(row_number) > 1) {
