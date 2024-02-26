@@ -40,10 +40,28 @@ df_summary <- tibble::tibble(
   fill_missing = rep(list(FALSE), length(year))
 )
 
+df_labor_force_survey <- tibble::tibble(
+  year = 2017:2022,
+  data_domain = rep("labor_force_survey", length(year)),
+  sheet_number = rep(5, length(year)),
+  col_names_row_number = rep(list(c(2, 4:5)), length(year)), # 2017-2022
+  fill_missing = rep(list(c(TRUE, TRUE, FALSE)), length(year)) # 2017-2022
+)
+
+df_social_survey <- tibble::tibble(
+  year = 2017:2022,
+  data_domain = rep("social_survey", length(year)),
+  sheet_number = rep(6, length(year)),
+  col_names_row_number = rep(list(c(4:5)), length(year)), # 2017-2022
+  fill_missing = rep(list(c(TRUE, FALSE)), length(year)) # 2017-2022
+)
+
 df_cbs_muni_params <- dplyr::bind_rows(
   df_physical,
   df_budget,
-  df_summary
+  df_summary,
+  df_labor_force_survey,
+  df_social_survey
 )
 
 usethis::use_data(df_cbs_muni_params, overwrite = TRUE, internal = TRUE)
