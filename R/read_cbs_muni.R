@@ -3,7 +3,8 @@
 #' This function is a wrapper around `readxl::readexcel()`, reading a specific
 #' municipal data file for a specific year and a specific data domain. Its added
 #' value is in its use of `row_to_names_fill()` and its pre-defined parameters for
-#' every year and its specific quirks in the Excel headers.
+#' every year and its specific quirks in the Excel headers. For advanced users,
+#' the full set of options is available with `il.cbs.muni:::df_cbs_muni_params`.
 #'
 #' @param path A character vector of length 1, denoting the local file path to the
 #'  municipal data file. A full list of available files by the CBS is at the
