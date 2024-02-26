@@ -111,7 +111,8 @@ Columns to keep. The default <code>NULL</code> keeps all columns.</p></dd>
 municipality and every column is a different variable for this municipality in
 that year. Be advised all columns are of type character, so you nee to parse
 the data types yourself at will. Column names are merged from the relevant headers,
-and only single whitespaces are kept.</p>
+and only single whitespaces are kept. Rows with more than 80% empty cells (usually
+rows with non-data notes) are removed.</p>
     </div>
 
     <div class="section level2">
