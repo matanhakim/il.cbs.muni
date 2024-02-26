@@ -12,6 +12,10 @@ test_that("read a municipal data frame well", {
   )
 
   expect_equal(
+    df_1[[1, 1]] |> unlist(),
+    "אום אל-פחם"
+  )
+  expect_equal(
     df_1 |> names() |> dplyr::nth(20),
     "דמוגרפיה_סה\"כ גברים בסוף השנה"
   )
