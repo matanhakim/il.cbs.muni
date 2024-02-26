@@ -2,7 +2,7 @@
 % Please edit documentation in R/read_cbs_muni.R
 \name{read_cbs_muni}
 \alias{read_cbs_muni}
-\title{Title Read a municipal data file to a tibble}
+\title{Read a municipal data file to a tibble}
 \usage{
 read_cbs_muni(path, year, data_domain = c("physical", "budget"))
 }
@@ -35,6 +35,6 @@ df <- read_cbs_muni(
 )
 
 df |>
-  head() |>
-  str()
+  dplyr::select(1:15) |>
+  dplyr::glimpse()
 }

@@ -1,4 +1,4 @@
-#' Title Read a municipal data file to a tibble
+#' Read a municipal data file to a tibble
 #'
 #' This function is a wrapper around `readxl::readexcel()`, reading a specific
 #' municipal data file for a specific year and a specific data domain. Its added
@@ -20,6 +20,7 @@
 #' that year. Be advised all columns are of type character, so you nee to parse
 #' the data types yourself at will.
 #' @export
+#' @md
 #'
 #' @examples
 #' df <- read_cbs_muni(
@@ -29,8 +30,8 @@
 #' )
 #'
 #' df |>
-#'   head() |>
-#'   str()
+#'   dplyr::select(1:15) |>
+#'   dplyr::glimpse()
 read_cbs_muni <- function(path, year, data_domain = c("physical", "budget")) {
   params <- df_cbs_muni_params |>
     dplyr::filter(year == {{ year }}, data_domain == {{ data_domain }})
