@@ -60,7 +60,7 @@ every year and its specific quirks in the Excel headers.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_cbs_muni</span><span class="op">(</span></span>
 <span>  <span class="va">path</span>,</span>
 <span>  <span class="va">year</span>,</span>
-<span>  data_domain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"physical"</span>, <span class="st">"budget"</span>, <span class="st">"summary"</span><span class="op">)</span>,</span>
+<span>  data_domain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"physical"</span>, <span class="st">"budget"</span>, <span class="st">"summary"</span>, <span class="st">"labor_force_survey"</span>, <span class="st">"social_survey"</span><span class="op">)</span>,</span>
 <span>  cols <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -80,7 +80,8 @@ pointed in <code>path</code> is for. Currently supporting only 2016 and later, s
 
 
 <dt>data_domain</dt>
-<dd><p>A character vector of length 1, one of <code>c("physical", "budget", "summary")</code>.
+<dd><p>A character vector of length 1, one of
+<code>c("physical", "budget", "summary", "labor_force_survey", "social_survey")</code>.
 Every Excel municipal data file has a few different data domains, most notably
 physical and population data, and budget data.</p></dd>
 
