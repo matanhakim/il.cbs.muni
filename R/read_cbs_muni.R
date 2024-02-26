@@ -11,7 +11,7 @@
 #' @param year A numeric vector of length 1 denoting which year the data file
 #' pointed in `path` is for. Currently supporting only 2016 and later, since before
 #' 2016 regional councils are split from cities and local councils.
-#' @param data_domain A character vector of length 1, one of `c("physical", "budget")`.
+#' @param data_domain A character vector of length 1, one of `c("physical", "budget", "summary")`.
 #' Every Excel municipal data file has a few different data domains, most notably
 #' physical and population data, and budget data.
 #' @param cols <[tidy-select](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)>
@@ -35,7 +35,7 @@
 #' df |>
 #'   dplyr::select(1:15) |>
 #'   dplyr::glimpse()
-read_cbs_muni <- function(path, year, data_domain = c("physical", "budget"), cols = NULL) {
+read_cbs_muni <- function(path, year, data_domain = c("physical", "budget", "summary"), cols = NULL) {
   params <- df_cbs_muni_params |>
     dplyr::filter(year == {{ year }}, data_domain == {{ data_domain }})
 

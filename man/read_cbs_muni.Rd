@@ -4,7 +4,12 @@
 \alias{read_cbs_muni}
 \title{Read a municipal data file to a tibble}
 \usage{
-read_cbs_muni(path, year, data_domain = c("physical", "budget"), cols = NULL)
+read_cbs_muni(
+  path,
+  year,
+  data_domain = c("physical", "budget", "summary"),
+  cols = NULL
+)
 }
 \arguments{
 \item{path}{A character vector of length 1, denoting the local file path to the
@@ -15,7 +20,7 @@ municipal data file. A full list of available files by the CBS is at the
 pointed in \code{path} is for. Currently supporting only 2016 and later, since before
 2016 regional councils are split from cities and local councils.}
 
-\item{data_domain}{A character vector of length 1, one of \code{c("physical", "budget")}.
+\item{data_domain}{A character vector of length 1, one of \code{c("physical", "budget", "summary")}.
 Every Excel municipal data file has a few different data domains, most notably
 physical and population data, and budget data.}
 
