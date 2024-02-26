@@ -28,7 +28,7 @@
 #' municipality and every column is a different variable for this municipality in
 #' that year. Be advised all columns are of type character, so you nee to parse
 #' the data types yourself at will. Column names are merged from the relevant headers,
-#' and only single whitespaces are kept. Rows with more than 80% empty cells (usually
+#' and only single whitespaces are kept. Rows with more than 90% empty cells (usually
 #' rows with non-data notes) are removed.
 #' @export
 #' @md
@@ -49,7 +49,13 @@ read_cbs_muni <- function(
     data_domain = c("physical", "budget", "summary", "labor_force_survey", "social_survey"),
     cols = NULL) {
   params <- df_cbs_muni_params |>
-    dplyr::filter(year == {{ year }}, data_domain == {{ data_domain }})
+    dplyr::filter(
+      year == {{ year }},
+      muni_type == {{ muni_type }},
+      data_domain == {{ data_domain }}
+    )
+
+  stopifnot(nrow(params) == 1)
 
   df <- readxl::read_excel(
     path = path,
@@ -62,7 +68,7 @@ read_cbs_muni <- function(
     row_number = unlist(params$col_names_row_number),
     fill_missing = unlist(params$fill_missing)
   ) |>
-    janitor::remove_empty("rows", cutoff = 0.8)
+    janitor::remove_empty("rows", cutoff = 0.1)
 
 
   if (!rlang::quo_is_null(rlang::enquo(cols))) {
