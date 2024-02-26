@@ -7,6 +7,7 @@
 read_cbs_muni(
   path,
   year,
+  muni_type = c("all", "city_lc", "rc"),
   data_domain = c("physical", "budget", "summary", "labor_force_survey", "social_survey"),
   cols = NULL
 )
@@ -19,6 +20,12 @@ municipal data file. A full list of available files by the CBS is at the
 \item{year}{A numeric vector of length 1 denoting which year the data file
 pointed in \code{path} is for. Currently supporting only 2016 and later, since before
 2016 regional councils are split from cities and local councils.}
+
+\item{muni_type}{A character vector of length 1, one of
+\code{c("all", "city_lc", "rc")}. Since 2016, all municipal types are bundled together
+in the same sheets, but before 2016 there are different sheets for cities and
+local councils (\code{"city_lc"}) and regional councils (\code{"rc"}). This parameter
+chooses which sheet you would read.}
 
 \item{data_domain}{A character vector of length 1, one of
 \code{c("physical", "budget", "summary", "labor_force_survey", "social_survey")}.

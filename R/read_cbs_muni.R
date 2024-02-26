@@ -11,6 +11,11 @@
 #' @param year A numeric vector of length 1 denoting which year the data file
 #' pointed in `path` is for. Currently supporting only 2016 and later, since before
 #' 2016 regional councils are split from cities and local councils.
+#' @param muni_type A character vector of length 1, one of
+#' `c("all", "city_lc", "rc")`. Since 2016, all municipal types are bundled together
+#' in the same sheets, but before 2016 there are different sheets for cities and
+#' local councils (`"city_lc"`) and regional councils (`"rc"`). This parameter
+#' chooses which sheet you would read.
 #' @param data_domain A character vector of length 1, one of
 #' `c("physical", "budget", "summary", "labor_force_survey", "social_survey")`.
 #' Every Excel municipal data file has a few different data domains, most notably
@@ -38,6 +43,7 @@
 #'   dplyr::glimpse()
 read_cbs_muni <- function(
     path, year,
+    muni_type = c("all", "city_lc", "rc"),
     data_domain = c("physical", "budget", "summary", "labor_force_survey", "social_survey"),
     cols = NULL) {
   params <- df_cbs_muni_params |>
