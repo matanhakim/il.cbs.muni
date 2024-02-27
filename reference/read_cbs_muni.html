@@ -109,7 +109,7 @@ Columns to keep. The default <code>NULL</code> keeps all columns.</p></dd>
 
 <p>A tibble with municipal data for a specific year, where every row is a
 municipality and every column is a different variable for this municipality in
-that year. Be advised all columns are of type character, so you nee to parse
+that year. Be advised all columns are of type character, so you need to parse
 the data types yourself at will. Column names are merged from the relevant headers,
 and only single whitespaces are kept. Rows with more than 90% empty cells (usually
 rows with non-data notes) are removed.</p>
@@ -122,12 +122,27 @@ rows with non-data notes) are removed.</p>
 <span class="r-in"><span>  year <span class="op">=</span> <span class="fl">2021</span>,</span></span>
 <span class="r-in"><span>  data_domain <span class="op">=</span> <span class="st">"physical"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in read_cbs_muni(system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),     year = 2021, data_domain = "physical"):</span> nrow(params) == 1 is not TRUE</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">df</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in UseMethod("select"):</span> no applicable method for 'select' applied to an object of class "function"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 255</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: 15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם הרשות`                                                          <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "א…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_סמל הרשות`                                                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ כללי_מחוז                                                           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "ח…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_מעמד מוניציפלי`                                               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "ע…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_מרחק מגבול מחוז תל אביב (ק"מ)`                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "6…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_שנת קבלת מעמד מוניציפלי`                                      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_מרחב ימי, רשויות מקומיות הגובלות בחוף הים`                    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_מספר חברי מועצה`                                              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_סמל ועדת תכנון ובנייה`                                        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "3…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_שם ועדת תכנון ובנייה`                                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "ע…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `כללי_שטח (קמ"ר)`                                                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `דמוגרפיה_צפיפות אוכלוסייה לקמ''ר ביישובים שמנו 5,000 תושבים ויותר` <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `דמוגרפיה_סה"כ אוכלוסייה בסוף השנה`                                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "5…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `דמוגרפיה_יהודים ואחרים (אחוזים)`                                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "-…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `דמוגרפיה_יהודים (אחוזים מתוך יהודים ואחרים)`                       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "-…</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
