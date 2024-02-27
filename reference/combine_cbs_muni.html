@@ -128,16 +128,15 @@ rows with non-data notes) are removed.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">combine_cbs_muni</span><span class="op">(</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">df_1</span> <span class="op">&lt;-</span> <span class="fu">combine_cbs_muni</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"2009.xls"</span>, package <span class="op">=</span> <span class="st">"il.cbs.muni"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  year <span class="op">=</span> <span class="fl">2009</span>,</span></span>
 <span class="r-in"><span>  cols_city <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span>, <span class="fl">11</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  cols_rc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span>, <span class="fl">25</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  data_domain <span class="op">=</span> <span class="st">"physical"</span></span></span>
+<span class="r-in"><span>  cols_rc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span>, <span class="fl">25</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df_1</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 253</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Columns: 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם הרשות`                           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "אום אל-פחם", "אופקים", "אור יהוד…</span>
@@ -148,6 +147,32 @@ rows with non-data notes) are removed.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `שנת קבלת מעמד מוניציפלי`            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "1984", "1995", "1988", "2001", "…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `מספר חברי מועצה 2008`               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "16", "13", "17", "15", "17", "13…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ `סה"כ אוכלוסייה בסוף 2009 (אלפים)`   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "46.100000000000001", "24", "34.3…</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">df_2</span> <span class="op">&lt;-</span> <span class="fu">combine_cbs_muni</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"2009.xls"</span>, package <span class="op">=</span> <span class="st">"il.cbs.muni"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  year <span class="op">=</span> <span class="fl">2009</span>,</span></span>
+<span class="r-in"><span>  cols_city <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  cols_rc <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  data_domain <span class="op">=</span> <span class="st">"budget"</span>,</span></span>
+<span class="r-in"><span>  col_names_from <span class="op">=</span> <span class="st">"rc"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">df_2</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 242</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: 12</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם הרשות`                                                               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סמל הרשות 2009`                                                         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סך כולל הכנסות של הרשות (אלפי ש"ח) 2009`                                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סך כולל הכנסות של הרשות - אחוז שינוי ראלי 2009 לעומת 2008`              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סה"כ הכנסות של הרשות מן התקציב הרגיל (אלפי ש"ח) 2009`                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סה"כ הכנסות של הרשות מן התקציב הרגיל - אחוז שינוי ראלי 2009 לעומת 2008` <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `הכנסות של הרשות מחינוך (אלפי ש"ח) 2009`                                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `הכנסות של הרשות מחינוך - אחוז שינוי ראלי 2009 לעומת 2008`               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `הכנסות של הרשות מרווחה (אלפי ש"ח) 2009`                                 <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `הכנסות של הרשות מרווחה - אחוז שינוי ראלי 2009 לעומת 2008`               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `הכנסות של הרשות ממפעל המים (אלפי ש"ח) 2009`                             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `הכנסות של הרשות ממפעל המים - אחוז שינוי ראלי 2009 לעומת 2008`           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> …</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
