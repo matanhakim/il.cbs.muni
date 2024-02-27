@@ -106,7 +106,34 @@ whitespaces are kept.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>     intersect, setdiff, setequal, union</span>
 <span class="r-in"><span><span class="fu">read_cbs_yishuv</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"bycode2021.xlsx"</span>, package <span class="op">=</span> <span class="st">"il.cbs.muni"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in read_cbs_yishuv(system.file("extdata", "bycode2021.xlsx", package = "il.cbs.muni")):</span> object 'params' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 1,483</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: 26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם יישוב`              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "אבו ג'ווייעד (שבט)", "אבו גוש", "אבו סנאן", "…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סמל יישוב`             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "967", "472", "473", "935", "958", "1042", "93…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ תעתיק                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "ABU JUWEI'ID", "ABU GHOSH", "ABU SINAN", "ABU…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סמל מחוז`              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "6", "1", "2", "6", "6", "6", "6", "6", "6", "…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם מחוז`               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "הדרום", "ירושלים", "הצפון", "הדרום", "הדרום",…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סמל נפה`               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "62", "11", "24", "62", "62", "62", "62", "62"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם נפה`                <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "באר שבע", "ירושלים", "עכו", "באר שבע", "באר ש…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `אזור טבעי`             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "623", "111", "245", "623", "623", "623", "623…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סמל מעמד מונציפאלי`    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "99", "99", NA, NA, NA, NA, "68", NA, NA, …</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם מעמד מונציפאלי`     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "חסר מעמד מוניציפלי", "מועצה מקומית", "מועצה מ…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שיוך מטרופוליני`       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "444", NA, NA, NA, NA, NA, NA, NA, NA, NA,…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `דת יישוב`              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "3", "2", "2", "3", "3", "3", "3", "2", "3", "…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סך הכל אוכלוסייה 2021` <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "7881", "14455", NA, NA, NA, NA, "2081", N…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `יהודים ואחרים`         <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "83", "31", NA, NA, NA, NA, "0", NA, NA, N…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `מזה: יהודים`           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "64", "14", NA, NA, NA, NA, "0", NA, NA, N…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ ערבים                   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "7798", "14424", NA, NA, NA, NA, "2081", N…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שנת ייסוד`             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `צורת יישוב שוטפת`      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "460", "280", "270", "460", "460", "460", "460…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `השתייכות ארגונית`      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ קואורדינטות             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2040057100", "2105263481", "2161876289", "186…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `גובה ממוצע`            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "686", "71", NA, NA, NA, NA, "449", NA, NA…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `ועדת תכנון`            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "699", "152", "252", "699", "699", "699", "699…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `תחנת משטרה`            <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "10002475", "15002143", NA, NA, NA, NA, "1…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ שנה                     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "2021", "2021", "2021", "2021", "2021", "2021"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם יישוב באנגלית`      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "Abu Juway'ad", "Abu Ghosh", "Abu Sinan", "Abu…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `אשכול רשויות מקומיות`  <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, NA, NA, NA, NA, NA, NA, "610", NA, NA, NA,…</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">read_cbs_yishuv</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"bycode2021.xlsx"</span>, package <span class="op">=</span> <span class="st">"il.cbs.muni"</span><span class="op">)</span>,</span></span>
@@ -114,7 +141,12 @@ whitespaces are kept.</p>
 <span class="r-in"><span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html" class="external-link">across</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">pad_yishuv_id</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in read_cbs_yishuv(system.file("extdata", "bycode2021.xlsx", package = "il.cbs.muni"),     cols = c(1, 2, 5, 13)):</span> object 'params' not found</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Rows: 1,483</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם יישוב`              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "אבו ג'ווייעד (שבט)", "אבו גוש", "אבו סנאן", "…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סמל יישוב`             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "0967", "0472", "0473", "0935", "0958", "1042"…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `שם מחוז`               <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> "הדרום", "ירושלים", "הצפון", "הדרום", "הדרום",…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $ `סך הכל אוכלוסייה 2021` <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> NA, "7881", "14455", NA, NA, NA, NA, "2081", N…</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
