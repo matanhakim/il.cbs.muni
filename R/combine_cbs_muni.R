@@ -1,5 +1,7 @@
 #' Combine municipalities data frames from different sheets
 #'
+#' This function is a wrapper around `read_cbs_muni()` to help in combining data
+#' for cities, local councils and regional councils.
 #' From 2015 and earlier, the Israeli CBS publishes municipal data on different
 #' sheets and formats for cities and local councils, and for regional councils.
 #' This function enables the user to combine the two data frames for selected

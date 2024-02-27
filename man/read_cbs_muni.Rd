@@ -44,7 +44,7 @@ and only single whitespaces are kept. Rows with more than 90\% empty cells (usua
 rows with non-data notes) are removed.
 }
 \description{
-This function is a wrapper around \code{readxl::readexcel()}, reading a specific
+This function is a wrapper around \code{readxl::read_excel()}, reading a specific
 municipal data file for a specific year and a specific data domain. Its added
 value is in its use of \code{row_to_names_fill()} and its pre-defined parameters for
 every year and its specific quirks in the Excel headers. For advanced users,

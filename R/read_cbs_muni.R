@@ -1,6 +1,6 @@
 #' Read a municipal data file to a tibble
 #'
-#' This function is a wrapper around `readxl::readexcel()`, reading a specific
+#' This function is a wrapper around `readxl::read_excel()`, reading a specific
 #' municipal data file for a specific year and a specific data domain. Its added
 #' value is in its use of `row_to_names_fill()` and its pre-defined parameters for
 #' every year and its specific quirks in the Excel headers. For advanced users,
