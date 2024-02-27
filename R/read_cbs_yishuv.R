@@ -35,7 +35,7 @@
 read_cbs_yishuv <- function(path, cols = NULL) {
   df <- readxl::read_excel(
     path = path,
-    sheet = params$sheet_number,
+    sheet = 1,
     col_names = TRUE,
     col_types = "text"
   )
