@@ -91,5 +91,3 @@ df_cbs_muni_params <- dplyr::bind_rows(
   df_social_survey,
   df_split_muni
 )
-
-usethis::use_data(df_cbs_muni_params, overwrite = TRUE, internal = TRUE)

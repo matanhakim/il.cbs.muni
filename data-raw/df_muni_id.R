@@ -32,5 +32,3 @@ df_muni_id <- readr::read_csv(
     muni_name = cbs_name
   ) |>
   dplyr::mutate(dplyr::across(dplyr::contains("muni_name"), clean_name))
-
-usethis::use_data(df_muni_id, internal = TRUE, overwrite = TRUE)
