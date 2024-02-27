@@ -26,7 +26,7 @@
 #'
 #' @return A tibble with municipal data for a specific year, where every row is a
 #' municipality and every column is a different variable for this municipality in
-#' that year. Be advised all columns are of type character, so you nee to parse
+#' that year. Be advised all columns are of type character, so you need to parse
 #' the data types yourself at will. Column names are merged from the relevant headers,
 #' and only single whitespaces are kept. Rows with more than 90% empty cells (usually
 #' rows with non-data notes) are removed.
