@@ -48,6 +48,10 @@ read_cbs_muni <- function(
     muni_type = c("all", "city_lc", "rc"),
     data_domain = c("physical", "budget", "summary", "labor_force_survey", "social_survey"),
     cols = NULL) {
+
+  muni_type <- rlang::arg_match(muni_type)
+  data_domain <- rlang::arg_match(data_domain)
+
   params <- df_cbs_muni_params |>
     dplyr::filter(
       year == {{ year }},

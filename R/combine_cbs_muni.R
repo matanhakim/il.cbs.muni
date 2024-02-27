@@ -48,6 +48,10 @@
 combine_cbs_muni <- function(
     path, year, cols_city, cols_rc, data_domain = c("physical", "budget"),
     col_names_from = c("city_lc", "rc")) {
+
+  data_domain <- rlang::arg_match(data_domain)
+  col_names_from <- rlang::arg_match(col_names_from)
+
   df_city <- read_cbs_muni(
     path = path,
     year = {{ year }},
