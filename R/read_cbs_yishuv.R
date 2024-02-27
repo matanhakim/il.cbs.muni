@@ -32,7 +32,7 @@
 #' ) |>
 #'   mutate(across(2, pad_yishuv_id)) |>
 #'   glimpse()
-read_cbs_muni <- function(path, cols = NULL) {
+read_cbs_yishuv <- function(path, cols = NULL) {
   df <- readxl::read_excel(
     path = path,
     sheet = params$sheet_number,
