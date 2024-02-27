@@ -37,16 +37,27 @@
 #' @md
 #'
 #' @examples
-#' df <- combine_cbs_muni(
+#' df_1 <- combine_cbs_muni(
 #'   system.file("extdata", "2009.xls", package = "il.cbs.muni"),
 #'   year = 2009,
 #'   cols_city = c(1:7, 11),
-#'   cols_rc = c(1:7, 25),
-#'   data_domain = "physical"
+#'   cols_rc = c(1:7, 25)
 #' )
 #'
-#' df |>
-#' dplyr::glimpse()
+#' df_1 |>
+#'   dplyr::glimpse()
+#'
+#' df_2 <- combine_cbs_muni(
+#'   system.file("extdata", "2009.xls", package = "il.cbs.muni"),
+#'   year = 2009,
+#'   cols_city = c(1:12),
+#'   cols_rc = c(1:12),
+#'   data_domain = "budget",
+#'   col_names_from = "rc"
+#' )
+#'
+#' df_2 |>
+#'   dplyr::glimpse()
 combine_cbs_muni <- function(
     path, year, cols_city, cols_rc, data_domain = c("physical", "budget"),
     col_names_from = c("city_lc", "rc")) {
