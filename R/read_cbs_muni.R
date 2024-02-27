@@ -77,7 +77,7 @@ read_cbs_muni <- function(
 
   if (!rlang::quo_is_null(rlang::enquo(cols))) {
     df <- df |>
-      dplyr::select({{ cols }})
+      dplyr::select(dplyr::all_of({{ cols }}))
   }
 
     names(df) <- df |>
