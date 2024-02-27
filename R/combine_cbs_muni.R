@@ -67,7 +67,6 @@ combine_cbs_muni <- function(
     data_domain =  {{ data_domain }},
     cols = cols_rc
   )
-  print(col_names_from)
 
   if (col_names_from == "city_lc")
     names(df_rc) <- names(df_city)
