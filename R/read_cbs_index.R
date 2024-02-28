@@ -21,7 +21,7 @@
 #' * `"yishuv"` - every row is a yishuv. In some years and indices this includes all yishuvim,
 #' in others only yishuvim within regional councils.
 #'
-#' * `"sa"` - every row is a statistical are within a city or local council.
+#' * `"sa"` - every row is a statistical area within a city or local council.
 #' @param cols <[tidy-select](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)>
 #'  Columns to keep. The default `NULL` keeps all columns.
 #'

@@ -29,7 +29,7 @@ pointed in \code{path} is for. Be aware that the year in question is the year
 \item \code{"muni"} - every row is a municipality.
 \item \code{"yishuv"} - every row is a yishuv. In some years and indices this includes all yishuvim,
 in others only yishuvim within regional councils.
-\item \code{"sa"} - every row is a statistical are within a city or local council.
+\item \code{"sa"} - every row is a statistical area within a city or local council.
 }}
 
 \item{cols}{<\href{https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html}{tidy-select}>
