@@ -86,7 +86,8 @@ combine_cbs_muni <- function(
   )
 
   if (!is.null(col_names)) {
-    names(df) <- col_names
+    names(df_rc) <- col_names
+    names(df_city) <- col_names
   } else {
     if (col_names_from == "city_lc")
       names(df_rc) <- names(df_city)
