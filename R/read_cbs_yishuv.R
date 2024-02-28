@@ -13,6 +13,9 @@
 #'  [relevant CBS page](https://www.cbs.gov.il/he/publications/Pages/2019/%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D-%D7%91%D7%99%D7%A9%D7%A8%D7%90%D7%9C.aspx).
 #' @param cols <[tidy-select](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)>
 #'  Columns to keep. The default `NULL` keeps all columns.
+#' @param col_names A character vector containing the new column names of the
+#' output tibble. If `NULL` then the tibble uses the original column names.
+#' Must be the same length as the number of columns picked in `cols`.
 #'
 #' @return A tibble with yishuvim data for a specific year, where every row is a
 #' yishuv and every column is a different variable for this yishuv in
@@ -32,7 +35,7 @@
 #' ) |>
 #'   mutate(across(2, pad_yishuv_id)) |>
 #'   glimpse()
-read_cbs_yishuv <- function(path, cols = NULL) {
+read_cbs_yishuv <- function(path, cols = NULL, col_names = NULL) {
   df <- readxl::read_excel(
     path = path,
     sheet = 1,
@@ -45,9 +48,13 @@ read_cbs_yishuv <- function(path, cols = NULL) {
       dplyr::select(dplyr::all_of({{ cols }}))
   }
 
-  names(df) <- df |>
-    names() |>
-    stringr::str_squish()
+  if (!is.null(col_names)) {
+    names(df) <- col_names
+  } else {
+    names(df) <- df |>
+      names() |>
+      stringr::str_squish()
+  }
 
   df
 }

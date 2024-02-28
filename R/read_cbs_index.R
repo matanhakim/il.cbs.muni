@@ -23,7 +23,10 @@
 #'
 #' * `"sa"` - every row is a statistical area within a city or local council.
 #' @param cols <[tidy-select](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)>
-#'  Columns to keep. The default `NULL` keeps all columns.
+#' Columns to keep. The default `NULL` keeps all columns.
+#' @param col_names A character vector containing the new column names of the
+#' output tibble. If `NULL` then the tibble uses the original column names.
+#' Must be the same length as the number of columns picked in `cols`.
 #'
 #' @return A tibble with CBS index data for a specific year, where every row is a
 #' `unit_type` and every column is a different variable for this `unit_type` in
@@ -45,7 +48,8 @@ read_cbs_index <- function(
   path, year,
   index_type = c("ses", "peri"),
   unit_type = c("muni", "yishuv", "sa"),
-  cols = NULL
+  cols = NULL,
+  col_names = NULL
 ) {
   index_type <- rlang::arg_match(index_type)
   unit_type <- rlang::arg_match(unit_type)
@@ -77,9 +81,13 @@ read_cbs_index <- function(
       dplyr::select(dplyr::all_of({{ cols }}))
   }
 
-  names(df) <- df |>
-    names() |>
-    stringr::str_squish()
+  if (!is.null(col_names)) {
+    names(df) <- col_names
+  } else {
+    names(df) <- df |>
+      names() |>
+      stringr::str_squish()
+  }
 
   df
 }

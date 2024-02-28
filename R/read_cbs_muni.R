@@ -23,6 +23,9 @@
 #' physical and population data, and budget data.
 #' @param cols <[tidy-select](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)>
 #'  Columns to keep. The default `NULL` keeps all columns.
+#' @param col_names A character vector containing the new column names of the
+#' output tibble. If `NULL` then the tibble uses the original column names.
+#' Must be the same length as the number of columns picked in `cols`.
 #'
 #' @return A tibble with municipal data for a specific year, where every row is a
 #' municipality and every column is a different variable for this municipality in
@@ -47,7 +50,9 @@ read_cbs_muni <- function(
     path, year,
     muni_type = c("all", "city_lc", "rc"),
     data_domain = c("physical", "budget", "summary", "labor_force_survey", "social_survey"),
-    cols = NULL) {
+    cols = NULL,
+    col_names = NULL
+  ) {
 
   muni_type <- rlang::arg_match(muni_type)
   data_domain <- rlang::arg_match(data_domain)
@@ -80,9 +85,13 @@ read_cbs_muni <- function(
       dplyr::select(dplyr::all_of({{ cols }}))
   }
 
+  if (!is.null(col_names)) {
+    names(df) <- col_names
+  } else {
     names(df) <- df |>
       names() |>
       stringr::str_squish()
+  }
 
-    df
+  df
 }

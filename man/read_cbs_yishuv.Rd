@@ -4,7 +4,7 @@
 \alias{read_cbs_yishuv}
 \title{Read a yishuvim data file to a tibble}
 \usage{
-read_cbs_yishuv(path, cols = NULL)
+read_cbs_yishuv(path, cols = NULL, col_names = NULL)
 }
 \arguments{
 \item{path}{A character vector of length 1, denoting the local file path to the
@@ -13,6 +13,10 @@ yishuvim data file. A full list of available files by the CBS is at the
 
 \item{cols}{<\href{https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html}{tidy-select}>
 Columns to keep. The default \code{NULL} keeps all columns.}
+
+\item{col_names}{A character vector containing the new column names of the
+output tibble. If \code{NULL} then the tibble uses the original column names.
+Must be the same length as the number of columns picked in \code{cols}.}
 }
 \value{
 A tibble with yishuvim data for a specific year, where every row is a

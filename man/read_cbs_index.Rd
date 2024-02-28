@@ -9,7 +9,8 @@ read_cbs_index(
   year,
   index_type = c("ses", "peri"),
   unit_type = c("muni", "yishuv", "sa"),
-  cols = NULL
+  cols = NULL,
+  col_names = NULL
 )
 }
 \arguments{
@@ -34,6 +35,10 @@ in others only yishuvim within regional councils.
 
 \item{cols}{<\href{https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html}{tidy-select}>
 Columns to keep. The default \code{NULL} keeps all columns.}
+
+\item{col_names}{A character vector containing the new column names of the
+output tibble. If \code{NULL} then the tibble uses the original column names.
+Must be the same length as the number of columns picked in \code{cols}.}
 }
 \value{
 A tibble with CBS index data for a specific year, where every row is a

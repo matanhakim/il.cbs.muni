@@ -22,6 +22,10 @@
 #' @param data_domain A character vector of length 1, one of
 #' `c("physical", "budget")`. Every Excel municipal data file has a few different
 #' data domains, most notably physical and population data, and budget data.
+#' @param col_names A character vector containing the new column names of the
+#' output tibble. If `NULL` then the tibble uses the original column names.
+#' Must be the same length as the number of columns picked in `cols`. If not `NULL`,
+#' overrides the choice in `col_names_from`.
 #' @param col_names_from A character vector of length 1, one of
 #' `c("city_lc", "rc")`. Denotes which column names should be kept - those from the
 #' cities and local councils sheet, or those from the regional councils sheet.
@@ -60,7 +64,7 @@
 #'   dplyr::glimpse()
 combine_cbs_muni <- function(
     path, year, cols_city, cols_rc, data_domain = c("physical", "budget"),
-    col_names_from = c("city_lc", "rc")) {
+    col_names = NULL, col_names_from = c("city_lc", "rc")) {
 
   data_domain <- rlang::arg_match(data_domain)
   col_names_from <- rlang::arg_match(col_names_from)
@@ -81,12 +85,16 @@ combine_cbs_muni <- function(
     cols = cols_rc
   )
 
-  if (col_names_from == "city_lc")
-    names(df_rc) <- names(df_city)
-  else if (col_names_from == "rc")
-    names(df_city) <- names(df_rc)
-  else
-    stop("`col_names_from` must be one of `c('city_lc', 'rc')`")
+  if (!is.null(col_names)) {
+    names(df) <- col_names
+  } else {
+    if (col_names_from == "city_lc")
+      names(df_rc) <- names(df_city)
+    else if (col_names_from == "rc")
+      names(df_city) <- names(df_rc)
+    else
+      stop("`col_names_from` must be one of `c('city_lc', 'rc')`")
+  }
 
   dplyr::bind_rows(df_city, df_rc)
 }

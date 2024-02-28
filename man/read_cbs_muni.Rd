@@ -9,7 +9,8 @@ read_cbs_muni(
   year,
   muni_type = c("all", "city_lc", "rc"),
   data_domain = c("physical", "budget", "summary", "labor_force_survey", "social_survey"),
-  cols = NULL
+  cols = NULL,
+  col_names = NULL
 )
 }
 \arguments{
@@ -34,6 +35,10 @@ physical and population data, and budget data.}
 
 \item{cols}{<\href{https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html}{tidy-select}>
 Columns to keep. The default \code{NULL} keeps all columns.}
+
+\item{col_names}{A character vector containing the new column names of the
+output tibble. If \code{NULL} then the tibble uses the original column names.
+Must be the same length as the number of columns picked in \code{cols}.}
 }
 \value{
 A tibble with municipal data for a specific year, where every row is a

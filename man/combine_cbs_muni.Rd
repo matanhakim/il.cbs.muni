@@ -10,6 +10,7 @@ combine_cbs_muni(
   cols_city,
   cols_rc,
   data_domain = c("physical", "budget"),
+  col_names = NULL,
   col_names_from = c("city_lc", "rc")
 )
 }
@@ -32,6 +33,11 @@ of desired columns as in \code{cols_city}, since the columns are matched by orde
 \item{data_domain}{A character vector of length 1, one of
 \code{c("physical", "budget")}. Every Excel municipal data file has a few different
 data domains, most notably physical and population data, and budget data.}
+
+\item{col_names}{A character vector containing the new column names of the
+output tibble. If \code{NULL} then the tibble uses the original column names.
+Must be the same length as the number of columns picked in \code{cols}. If not \code{NULL},
+overrides the choice in \code{col_names_from}.}
 
 \item{col_names_from}{A character vector of length 1, one of
 \code{c("city_lc", "rc")}. Denotes which column names should be kept - those from the
