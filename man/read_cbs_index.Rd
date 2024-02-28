@@ -20,7 +20,7 @@ or for \href{https://www.cbs.gov.il/he/subjects/Pages/\%D7\%9E\%D7\%93\%D7\%93-\
 
 \item{year}{A numeric vector of length 1 denoting which year the data file
 pointed in \code{path} is for. Be aware that the year in question is the year
-** the data is for**, not the year \strong{the data was published in}.}
+\strong{the data is for}, not the year \strong{the data was published in}.}
 
 \item{index_type}{A character vector of length 1, one of \code{c("ses", "peri")}.}
 

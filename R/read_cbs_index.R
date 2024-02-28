@@ -12,7 +12,7 @@
 #'  or for [peripheral level](https://www.cbs.gov.il/he/subjects/Pages/%D7%9E%D7%93%D7%93-%D7%A4%D7%A8%D7%99%D7%A4%D7%A8%D7%99%D7%90%D7%9C%D7%99%D7%95%D7%AA-%D7%A9%D7%9C-%D7%A8%D7%A9%D7%95%D7%99%D7%95%D7%AA-%D7%9E%D7%A7%D7%95%D7%9E%D7%99%D7%95%D7%AA.aspx).
 #' @param year  A numeric vector of length 1 denoting which year the data file
 #' pointed in `path` is for. Be aware that the year in question is the year
-#' ** the data is for**, not the year **the data was published in**.
+#' **the data is for**, not the year **the data was published in**.
 #' @param index_type A character vector of length 1, one of `c("ses", "peri")`.
 #' @param unit_type A character vector of length 1, one of `c("muni", "yishuv", "sa")`.
 #'
