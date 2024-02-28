@@ -72,6 +72,7 @@ columns.</p>
 <span>  <span class="va">cols_city</span>,</span>
 <span>  <span class="va">cols_rc</span>,</span>
 <span>  data_domain <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"physical"</span>, <span class="st">"budget"</span><span class="op">)</span>,</span>
+<span>  col_names <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  col_names_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"city_lc"</span>, <span class="st">"rc"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -105,6 +106,13 @@ of desired columns as in <code>cols_city</code>, since the columns are matched b
 <dd><p>A character vector of length 1, one of
 <code>c("physical", "budget")</code>. Every Excel municipal data file has a few different
 data domains, most notably physical and population data, and budget data.</p></dd>
+
+
+<dt>col_names</dt>
+<dd><p>A character vector containing the new column names of the
+output tibble. If <code>NULL</code> then the tibble uses the original column names.
+Must be the same length as the number of columns picked in <code>cols</code>. If not <code>NULL</code>,
+overrides the choice in <code>col_names_from</code>.</p></dd>
 
 
 <dt>col_names_from</dt>

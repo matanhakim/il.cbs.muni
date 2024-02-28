@@ -66,7 +66,7 @@ southern Israel, some industry areas, Mikveh Israel, and more.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_cbs_yishuv</span><span class="op">(</span><span class="va">path</span>, cols <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">read_cbs_yishuv</span><span class="op">(</span><span class="va">path</span>, cols <span class="op">=</span> <span class="cn">NULL</span>, col_names <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -80,6 +80,12 @@ yishuvim data file. A full list of available files by the CBS is at the
 <dt>cols</dt>
 <dd><p>&lt;<a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html" class="external-link">tidy-select</a>&gt;
 Columns to keep. The default <code>NULL</code> keeps all columns.</p></dd>
+
+
+<dt>col_names</dt>
+<dd><p>A character vector containing the new column names of the
+output tibble. If <code>NULL</code> then the tibble uses the original column names.
+Must be the same length as the number of columns picked in <code>cols</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">

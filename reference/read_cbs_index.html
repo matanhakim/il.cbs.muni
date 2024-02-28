@@ -65,7 +65,8 @@ with <code>il.cbs.muni:::df_cbs_index_params</code>.</p>
 <span>  <span class="va">year</span>,</span>
 <span>  index_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ses"</span>, <span class="st">"peri"</span><span class="op">)</span>,</span>
 <span>  unit_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"muni"</span>, <span class="st">"yishuv"</span>, <span class="st">"sa"</span><span class="op">)</span>,</span>
-<span>  cols <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  cols <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  col_names <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -99,6 +100,12 @@ in others only yishuvim within regional councils.</p></li>
 <dt>cols</dt>
 <dd><p>&lt;<a href="https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html" class="external-link">tidy-select</a>&gt;
 Columns to keep. The default <code>NULL</code> keeps all columns.</p></dd>
+
+
+<dt>col_names</dt>
+<dd><p>A character vector containing the new column names of the
+output tibble. If <code>NULL</code> then the tibble uses the original column names.
+Must be the same length as the number of columns picked in <code>cols</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
