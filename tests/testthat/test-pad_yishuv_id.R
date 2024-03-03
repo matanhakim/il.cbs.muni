@@ -11,4 +11,6 @@ test_that("pad_yishuv_id() throws an error when input is too long", {
 
 test_that("pad_yishuv_id() throws an error when input is  not character or numeric", {
   expect_error(pad_yishuv_id(TRUE))
+  expect_equal(pad_yishuv_id(NA) |> suppressWarnings(), NA_character_)
+  expect_warning(pad_yishuv_id(NA))
 })
