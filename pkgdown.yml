@@ -1,9 +1,8 @@
 pandoc: 3.1.11
-pkgdown: 2.0.7
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles: {}
-last_built: 2024-03-03T09:09Z
+last_built: 2025-08-07T11:56Z
 urls:
   reference: https://matanhakim.github.io/il.cbs.muni/reference
   article: https://matanhakim.github.io/il.cbs.muni/articles
-
