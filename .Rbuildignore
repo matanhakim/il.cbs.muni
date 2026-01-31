@@ -7,3 +7,8 @@
 ^pkgdown$
 ^\.github$
 ^data-raw$
+^cran-comments\.md$
+^CRAN.*\.md$
+^\.httr-oauth$
+^.*\.Rcheck$
+^.*\.tar\.gz$

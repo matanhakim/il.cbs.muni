@@ -10,7 +10,7 @@
 #' @param row_number A numeric vector with he row indices of `data` containing the
 #' variable names. Allows for multiple rows input as a numeric vector. If multiple
 #' rows, values in the same column would be pasted with the `sep` argument as a
-#' separator. NA's are ignored.
+#' separator. NAs are ignored.
 #' @param fill_missing A logical vector of length 1 or of length `length(row_number)`.
 #' Every value in the vector denotes for the matching row in `data[row_number, ]` if
 #' the row should fill missing values (from left to right). If `TRUE` for a row,
@@ -41,6 +41,76 @@
 #' @importFrom rlang .data
 row_to_names_fill <- function(data, row_number, fill_missing = TRUE, remove_row = TRUE,
                           remove_rows_above = TRUE, sep = "_") {
+    # Validate data
+    if (!is.data.frame(data)) {
+      rlang::abort(
+        "`data` must be a data.frame.",
+        class = "row_to_names_fill_invalid_data"
+      )
+    }
+    
+    # Validate row_number
+    if (!is.numeric(row_number)) {
+      rlang::abort(
+        "`row_number` must be a numeric vector.",
+        class = "row_to_names_fill_invalid_row_number"
+      )
+    }
+    
+    if (any(row_number < 1 | row_number > nrow(data), na.rm = TRUE)) {
+      rlang::abort(
+        c(
+          "`row_number` must contain valid row indices.",
+          "i" = paste0("Data has ", nrow(data), " rows."),
+          "x" = paste0("Invalid row numbers: ", paste(row_number[row_number < 1 | row_number > nrow(data)], collapse = ", "))
+        ),
+        class = "row_to_names_fill_row_out_of_bounds"
+      )
+    }
+    
+    # Validate fill_missing
+    if (!is.logical(fill_missing)) {
+      rlang::abort(
+        "`fill_missing` must be a logical vector.",
+        class = "row_to_names_fill_invalid_fill_missing"
+      )
+    }
+    
+    if (length(fill_missing) != 1 && length(fill_missing) != length(row_number)) {
+      rlang::abort(
+        c(
+          "`fill_missing` must have length 1 or equal to length of `row_number`.",
+          "i" = paste0("Length of `row_number`: ", length(row_number)),
+          "x" = paste0("Length of `fill_missing`: ", length(fill_missing))
+        ),
+        class = "row_to_names_fill_length_mismatch"
+      )
+    }
+    
+    # Validate remove_row
+    if (!is.logical(remove_row) || length(remove_row) != 1 || is.na(remove_row)) {
+      rlang::abort(
+        "`remove_row` must be a single logical value (TRUE or FALSE).",
+        class = "row_to_names_fill_invalid_remove_row"
+      )
+    }
+    
+    # Validate remove_rows_above
+    if (!is.logical(remove_rows_above) || length(remove_rows_above) != 1 || is.na(remove_rows_above)) {
+      rlang::abort(
+        "`remove_rows_above` must be a single logical value (TRUE or FALSE).",
+        class = "row_to_names_fill_invalid_remove_rows_above"
+      )
+    }
+    
+    # Validate sep
+    if (!is.character(sep) || length(sep) != 1) {
+      rlang::abort(
+        "`sep` must be a character vector of length 1.",
+        class = "row_to_names_fill_invalid_sep"
+      )
+    }
+    
     col_names <- purrr::map2(
       row_number,
       fill_missing,

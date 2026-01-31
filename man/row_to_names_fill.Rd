@@ -19,7 +19,7 @@ row_to_names_fill(
 \item{row_number}{A numeric vector with he row indices of \code{data} containing the
 variable names. Allows for multiple rows input as a numeric vector. If multiple
 rows, values in the same column would be pasted with the \code{sep} argument as a
-separator. NA's are ignored.}
+separator. NAs are ignored.}
 
 \item{fill_missing}{A logical vector of length 1 or of length \code{length(row_number)}.
 Every value in the vector denotes for the matching row in \code{data[row_number, ]} if

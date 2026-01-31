@@ -16,8 +16,8 @@
 #' * `"tax"` is for Israel Tax Authority municipal id (also known as a "H.P. number")
 #'
 #' @param include_names A logical vector of length 1, denoting if the names of
-#' municipalites (for each of the `id_types` chosen) should be included. Be aware
-#' that some munipilati names might differ between different agencies.
+#' municipalities (for each of the `id_types` chosen) should be included. Be aware
+#' that some municipal names might differ between different agencies.
 #'
 #' @return A tibble, where every row is a municipality and the columns include id's
 #' (and possibly names) of the municipalities from the chosen agencies.
@@ -30,6 +30,34 @@
 #' read_muni_id(id_types = c("muni", "edu"), include_names = TRUE) |>
 #'   dplyr::glimpse()
 read_muni_id <- function(id_types = c("muni", "edu", "tax"), include_names = FALSE) {
+  # Validate id_types
+  if (!is.character(id_types)) {
+    rlang::abort(
+      "`id_types` must be a character vector.",
+      class = "read_muni_id_invalid_id_types"
+    )
+  }
+  
+  valid_types <- c("muni", "edu", "tax")
+  invalid_types <- setdiff(id_types, valid_types)
+  if (length(invalid_types) > 0) {
+    rlang::abort(
+      c(
+        "`id_types` must contain only valid type values.",
+        "i" = paste0("Valid types: ", paste(valid_types, collapse = ", ")),
+        "x" = paste0("Invalid types provided: ", paste(invalid_types, collapse = ", "))
+      ),
+      class = "read_muni_id_invalid_type_values"
+    )
+  }
+  
+  # Validate include_names
+  if (!is.logical(include_names) || length(include_names) != 1 || is.na(include_names)) {
+    rlang::abort(
+      "`include_names` must be a single logical value (TRUE or FALSE).",
+      class = "read_muni_id_invalid_include_names"
+    )
+  }
 
   if (include_names) {
     df_muni_id |>

@@ -5,7 +5,7 @@
 #' cities and local councils the yishuv id and the municipality id are the same.
 #' But in the case of regional councils, the municipality id is for the regional
 #' council, while every yishuv within that municipality has a different yishuv id.
-#' The Israeli CBS uses a concept of "municipal status" to differntiate between
+#' The Israeli CBS uses a concept of "municipal status" to differentiate between
 #' the two. A municipal status of "0" represents a city, and "99" represents a local
 #' council. Every other 2-digit number is the municipal id of a regional council.
 #' This function modifies a municipal status based on itself and the yishuv_id.
@@ -26,11 +26,44 @@
 #' yishuv_id <- c("0001", "1000", "1234", "1567")
 #' modify_muni_id(muni_id, yishuv_id)
 modify_muni_id <- function(muni_id, yishuv_id){
-  stopifnot(is.character(yishuv_id) | is.numeric(yishuv_id))
+  # Validate yishuv_id
+  if (!is.character(yishuv_id) && !is.numeric(yishuv_id) && 
+      !(is.logical(yishuv_id) && all(is.na(yishuv_id)))) {
+    rlang::abort(
+      "`yishuv_id` must be a character or numeric vector.",
+      class = "modify_muni_id_invalid_yishuv_type"
+    )
+  }
+  
+  # Validate muni_id
+  if (!is.character(muni_id) && !is.numeric(muni_id) && 
+      !(is.logical(muni_id) && all(is.na(muni_id)))) {
+    rlang::abort(
+      "`muni_id` must be a character or numeric vector.",
+      class = "modify_muni_id_invalid_muni_type"
+    )
+  }
+  
+  # Check vector lengths match or can be recycled
+  len_muni <- length(muni_id)
+  len_yishuv <- length(yishuv_id)
+  
+  if (len_muni != len_yishuv && len_muni != 1 && len_yishuv != 1) {
+    rlang::abort(
+      c(
+        "`muni_id` and `yishuv_id` must have compatible lengths.",
+        "i" = paste0("Length of `muni_id`: ", len_muni),
+        "i" = paste0("Length of `yishuv_id`: ", len_yishuv)
+      ),
+      class = "modify_muni_id_length_mismatch"
+    )
+  }
+  
   if (is.numeric(muni_id))
     muni_id <- as.character(muni_id)
   if (is.numeric(yishuv_id))
     yishuv_id <- as.character(yishuv_id)
+  
   dplyr::case_when(
     (muni_id == "0" | muni_id == "99") ~ yishuv_id,
     TRUE ~ stringr::str_pad(muni_id, width = 2, side = "left", pad = "0")

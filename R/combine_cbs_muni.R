@@ -31,7 +31,7 @@
 #' cities and local councils sheet, or those from the regional councils sheet.
 #'
 #' @return A tibble with municipal data for a specific year, with the columns from
-#' `cols_city` and `cols_rc` binded by rows and matched by order of columns. Every row is a
+#' `cols_city` and `cols_rc` bound by rows and matched by order of columns. Every row is a
 #' municipality and every column is a different variable for this municipality in
 #' that year. Be advised all columns are of type character, so you need to parse
 #' the data types yourself at will. Column names are merged from the relevant headers,
@@ -65,6 +65,30 @@
 combine_cbs_muni <- function(
     path, year, cols_city, cols_rc, data_domain = c("physical", "budget"),
     col_names = NULL, col_names_from = c("city_lc", "rc")) {
+
+  # Validate path
+  if (!is.character(path) || length(path) != 1) {
+    rlang::abort(
+      "`path` must be a character vector of length 1.",
+      class = "combine_cbs_muni_invalid_path"
+    )
+  }
+  
+  # Validate year
+  if (!is.numeric(year) || length(year) != 1) {
+    rlang::abort(
+      "`year` must be a numeric vector of length 1.",
+      class = "combine_cbs_muni_invalid_year"
+    )
+  }
+  
+  # Validate col_names if provided
+  if (!is.null(col_names) && !is.character(col_names)) {
+    rlang::abort(
+      "`col_names` must be NULL or a character vector.",
+      class = "combine_cbs_muni_invalid_col_names"
+    )
+  }
 
   data_domain <- rlang::arg_match(data_domain)
   col_names_from <- rlang::arg_match(col_names_from)

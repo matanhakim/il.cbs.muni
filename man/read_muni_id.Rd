@@ -17,8 +17,8 @@ municipalities are kept for the selected sources:
 }}
 
 \item{include_names}{A logical vector of length 1, denoting if the names of
-municipalites (for each of the \code{id_types} chosen) should be included. Be aware
-that some munipilati names might differ between different agencies.}
+municipalities (for each of the \code{id_types} chosen) should be included. Be aware
+that some municipal names might differ between different agencies.}
 }
 \value{
 A tibble, where every row is a municipality and the columns include id's

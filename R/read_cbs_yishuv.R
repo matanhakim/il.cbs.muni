@@ -36,6 +36,32 @@
 #'   mutate(across(2, pad_yishuv_id)) |>
 #'   glimpse()
 read_cbs_yishuv <- function(path, cols = NULL, col_names = NULL) {
+  # Validate path
+  if (!is.character(path) || length(path) != 1) {
+    rlang::abort(
+      "`path` must be a character vector of length 1.",
+      class = "read_cbs_yishuv_invalid_path"
+    )
+  }
+  
+  if (!file.exists(path)) {
+    rlang::abort(
+      c(
+        "`path` does not exist.",
+        "i" = paste0("Provided path: ", path)
+      ),
+      class = "read_cbs_yishuv_path_not_found"
+    )
+  }
+  
+  # Validate col_names if provided
+  if (!is.null(col_names) && !is.character(col_names)) {
+    rlang::abort(
+      "`col_names` must be NULL or a character vector.",
+      class = "read_cbs_yishuv_invalid_col_names"
+    )
+  }
+  
   df <- readxl::read_excel(
     path = path,
     sheet = 1,

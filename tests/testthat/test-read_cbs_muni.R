@@ -45,3 +45,47 @@ test_that("read a municipal data frame well", {
     c("שם הרשות", "כללי_סמל הרשות", "כללי_מחוז", "כללי_מעמד מוניציפלי", "בחירות מוניציפליות וארציות_בחירות לכנסת ה-25 01/11/22_אחוזי הצבעה")
   )
 })
+
+test_that("throws error for invalid path", {
+  expect_error(
+    read_cbs_muni("nonexistent_file.xlsx", year = 2021, data_domain = "physical"),
+    class = "read_cbs_muni_path_not_found"
+  )
+  
+  expect_error(
+    read_cbs_muni(c("file1.xlsx", "file2.xlsx"), year = 2021, data_domain = "physical"),
+    class = "read_cbs_muni_invalid_path"
+  )
+})
+
+test_that("throws error for invalid year", {
+  expect_error(
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = "2021",
+      data_domain = "physical"
+    ),
+    class = "read_cbs_muni_invalid_year"
+  )
+  
+  expect_error(
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = c(2021, 2022),
+      data_domain = "physical"
+    ),
+    class = "read_cbs_muni_invalid_year"
+  )
+})
+
+test_that("throws error for invalid col_names", {
+  expect_error(
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = 2021,
+      data_domain = "physical",
+      col_names = 123
+    ),
+    class = "read_cbs_muni_invalid_col_names"
+  )
+})

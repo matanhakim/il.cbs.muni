@@ -54,6 +54,40 @@ read_cbs_muni <- function(
     col_names = NULL
   ) {
 
+  # Validate path
+  if (!is.character(path) || length(path) != 1) {
+    rlang::abort(
+      "`path` must be a character vector of length 1.",
+      class = "read_cbs_muni_invalid_path"
+    )
+  }
+  
+  if (!file.exists(path)) {
+    rlang::abort(
+      c(
+        "`path` does not exist.",
+        "i" = paste0("Provided path: ", path)
+      ),
+      class = "read_cbs_muni_path_not_found"
+    )
+  }
+  
+  # Validate year
+  if (!is.numeric(year) || length(year) != 1) {
+    rlang::abort(
+      "`year` must be a numeric vector of length 1.",
+      class = "read_cbs_muni_invalid_year"
+    )
+  }
+  
+  # Validate col_names if provided
+  if (!is.null(col_names) && !is.character(col_names)) {
+    rlang::abort(
+      "`col_names` must be NULL or a character vector.",
+      class = "read_cbs_muni_invalid_col_names"
+    )
+  }
+
   muni_type <- rlang::arg_match(muni_type)
   data_domain <- rlang::arg_match(data_domain)
 

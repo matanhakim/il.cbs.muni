@@ -45,7 +45,7 @@ cities and local councils sheet, or those from the regional councils sheet.}
 }
 \value{
 A tibble with municipal data for a specific year, with the columns from
-\code{cols_city} and \code{cols_rc} binded by rows and matched by order of columns. Every row is a
+\code{cols_city} and \code{cols_rc} bound by rows and matched by order of columns. Every row is a
 municipality and every column is a different variable for this municipality in
 that year. Be advised all columns are of type character, so you need to parse
 the data types yourself at will. Column names are merged from the relevant headers,

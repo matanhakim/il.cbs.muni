@@ -18,13 +18,17 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-il.cbs.muni is an analyst oriented utility package to handle the different quirks of
-  the Israeli CBS municipal data, harmonize id's and bring together data points
-  from different years.
+il.cbs.muni is an analyst-oriented utility package for working with Israeli Central Bureau of Statistics (CBS) municipal data. It provides tools to handle the different quirks of CBS data formats, harmonize IDs across different years, and combine data points from multiple sources.
 
 ## Installation
 
-You can install the development version of il.cbs.muni from [GitHub](https://github.com/) with:
+You can install the released version of il.cbs.muni from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("il.cbs.muni")
+```
+
+Or install the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")

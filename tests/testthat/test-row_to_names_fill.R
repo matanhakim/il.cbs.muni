@@ -1,3 +1,45 @@
+test_that("throws error for invalid input types", {
+  df_1 <- data.frame(a = 1:3, b = 4:6)
+  
+  expect_error(
+    row_to_names_fill("not_a_df", 1),
+    class = "row_to_names_fill_invalid_data"
+  )
+  
+  expect_error(
+    row_to_names_fill(df_1, "not_numeric"),
+    class = "row_to_names_fill_invalid_row_number"
+  )
+  
+  expect_error(
+    row_to_names_fill(df_1, 1, fill_missing = "not_logical"),
+    class = "row_to_names_fill_invalid_fill_missing"
+  )
+})
+
+test_that("throws error for out of range row numbers", {
+  df_1 <- data.frame(a = 1:3, b = 4:6)
+  
+  expect_error(
+    row_to_names_fill(df_1, 10),
+    class = "row_to_names_fill_row_out_of_bounds"
+  )
+  
+  expect_error(
+    row_to_names_fill(df_1, 0),
+    class = "row_to_names_fill_row_out_of_bounds"
+  )
+})
+
+test_that("throws error for length mismatch", {
+  df_1 <- data.frame(a = 1:3, b = 4:6)
+  
+  expect_error(
+    row_to_names_fill(df_1, 1:2, fill_missing = c(TRUE, FALSE, TRUE)),
+    class = "row_to_names_fill_length_mismatch"
+  )
+})
+
 test_that("fill and cast rows to names of a data frame", {
   df_1 <- data.frame(
     a = 1:6,
