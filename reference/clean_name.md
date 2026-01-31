@@ -25,8 +25,10 @@ characters that are only letters and digits, excluding the following:
 ``` r
 clean_name("test-123_test*456")
 #> [1] "test-123test456"
-clean_name("אילון תבור*")
-#> [1] "אילון תבור"
-clean_name("ג'סר א-זרקא")
-#> [1] "ג'סר א-זרקא"
+x <- read_cbs_yishuv(system.file("extdata", "bycode2021.xlsx",
+ package = "il.cbs.muni"))[[1]][c(153, 342)]
+x
+#> [1] "אילון תבור*" "ג'סר א-זרקא"
+clean_name(x)
+#> [1] "אילון תבור"  "ג'סר א-זרקא"
 ```
