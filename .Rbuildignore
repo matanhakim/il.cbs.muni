@@ -12,3 +12,4 @@
 ^\.httr-oauth$
 ^.*\.Rcheck$
 ^.*\.tar\.gz$
+^CRAN-SUBMISSION$

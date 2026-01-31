@@ -8,8 +8,10 @@
 #'
 #' @examples
 #' clean_name("test-123_test*456")
-#' clean_name("אילון תבור*")
-#' clean_name("ג'סר א-זרקא")
+#' x <- read_cbs_yishuv(system.file("extdata", "bycode2021.xlsx",
+#'  package = "il.cbs.muni"))[[1]][c(153, 342)]
+#' x
+#' clean_name(x)
 clean_name <- function(name) {
   # Validate input
   if (!is.character(name)) {
