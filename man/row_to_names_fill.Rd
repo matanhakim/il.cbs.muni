@@ -37,6 +37,13 @@ from the resulting data.frame, in the case that \code{row_number != 1}.}
 \item{sep}{A character vector of length 1 to separate the values in the case of
 multiple rows input to \code{row_number}.}
 }
+\value{
+A data frame (class \code{data.frame}) with the same structure as the input \code{data},
+but with column names derived from the specified row(s). The returned data frame
+has the same number of columns as the input, with rows removed according to the
+\code{remove_row} and \code{remove_rows_above} parameters. All data types and values are
+preserved from the original data frame.
+}
 \description{
 Casts data from rows to the column names of a data frame, with the option to fill
 missing values row-wise. This utility is helpful in the case of merged cells in
