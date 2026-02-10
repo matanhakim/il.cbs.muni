@@ -58,6 +58,15 @@ row_to_names_fill(
   A character vector of length 1 to separate the values in the case of
   multiple rows input to `row_number`.
 
+## Value
+
+A data frame (class `data.frame`) with the same structure as the input
+`data`, but with column names derived from the specified row(s). The
+returned data frame has the same number of columns as the input, with
+rows removed according to the `remove_row` and `remove_rows_above`
+parameters. All data types and values are preserved from the original
+data frame.
+
 ## Examples
 
 ``` r
