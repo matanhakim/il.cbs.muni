@@ -42,18 +42,81 @@ test_that("read a municipal data frame well", {
 
   expect_equal(
     df_3 |> names(),
-    c("שם הרשות", "כללי_סמל הרשות", "כללי_מחוז", "כללי_מעמד מוניציפלי", "בחירות מוניציפליות וארציות_בחירות לכנסת ה-25 01/11/22_אחוזי הצבעה")
+    c(
+      "שם הרשות",
+      "כללי_סמל הרשות",
+      "כללי_מחוז",
+      "כללי_מעמד מוניציפלי",
+      "בחירות מוניציפליות וארציות_בחירות לכנסת ה-25 01/11/22_אחוזי הצבעה"
+    )
+  )
+})
+
+test_that("returns one row per municipality for a pre-2022 file", {
+  df <- read_cbs_muni(
+    system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+    year = 2021,
+    data_domain = "physical"
+  )
+  expect_equal(nrow(df), 255)
+})
+
+test_that("drop_summary_rows removes rows with an empty authority symbol", {
+  df <- data.frame(
+    name = c("כלל ארצי", "עיריות", "אום אל-פחם", "אופקים"),
+    symbol = c(NA, "", "2710", "0031"),
+    district = c(NA, NA, "חיפה", "הדרום"),
+    stringsAsFactors = FALSE
+  )
+  out <- drop_summary_rows(df, symbol_col = 2)
+  expect_equal(nrow(out), 2)
+  expect_equal(out[[2]], c("2710", "0031"))
+})
+
+test_that("drop_summary_rows is a no-op without a symbol column", {
+  df <- data.frame(only = c("a", "b"))
+  expect_equal(drop_summary_rows(df, symbol_col = 2), df)
+})
+
+test_that("throws error for invalid keep_summary_rows", {
+  expect_error(
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = 2021,
+      data_domain = "physical",
+      keep_summary_rows = "yes"
+    ),
+    class = "read_cbs_muni_invalid_keep_summary_rows"
+  )
+})
+
+test_that("throws an informative error for an unsupported year", {
+  expect_error(
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = 1990,
+      data_domain = "physical"
+    ),
+    class = "read_cbs_muni_unsupported"
   )
 })
 
 test_that("throws error for invalid path", {
   expect_error(
-    read_cbs_muni("nonexistent_file.xlsx", year = 2021, data_domain = "physical"),
+    read_cbs_muni(
+      "nonexistent_file.xlsx",
+      year = 2021,
+      data_domain = "physical"
+    ),
     class = "read_cbs_muni_path_not_found"
   )
-  
+
   expect_error(
-    read_cbs_muni(c("file1.xlsx", "file2.xlsx"), year = 2021, data_domain = "physical"),
+    read_cbs_muni(
+      c("file1.xlsx", "file2.xlsx"),
+      year = 2021,
+      data_domain = "physical"
+    ),
     class = "read_cbs_muni_invalid_path"
   )
 })
@@ -67,7 +130,7 @@ test_that("throws error for invalid year", {
     ),
     class = "read_cbs_muni_invalid_year"
   )
-  
+
   expect_error(
     read_cbs_muni(
       system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),

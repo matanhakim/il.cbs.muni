@@ -25,29 +25,35 @@
 #' muni_id <- c(0, 99, 1, 2)
 #' yishuv_id <- c("0001", "1000", "1234", "1567")
 #' modify_muni_id(muni_id, yishuv_id)
-modify_muni_id <- function(muni_id, yishuv_id){
+modify_muni_id <- function(muni_id, yishuv_id) {
   # Validate yishuv_id
-  if (!is.character(yishuv_id) && !is.numeric(yishuv_id) && 
-      !(is.logical(yishuv_id) && all(is.na(yishuv_id)))) {
+  if (
+    !is.character(yishuv_id) &&
+      !is.numeric(yishuv_id) &&
+      !(is.logical(yishuv_id) && all(is.na(yishuv_id)))
+  ) {
     rlang::abort(
       "`yishuv_id` must be a character or numeric vector.",
       class = "modify_muni_id_invalid_yishuv_type"
     )
   }
-  
+
   # Validate muni_id
-  if (!is.character(muni_id) && !is.numeric(muni_id) && 
-      !(is.logical(muni_id) && all(is.na(muni_id)))) {
+  if (
+    !is.character(muni_id) &&
+      !is.numeric(muni_id) &&
+      !(is.logical(muni_id) && all(is.na(muni_id)))
+  ) {
     rlang::abort(
       "`muni_id` must be a character or numeric vector.",
       class = "modify_muni_id_invalid_muni_type"
     )
   }
-  
+
   # Check vector lengths match or can be recycled
   len_muni <- length(muni_id)
   len_yishuv <- length(yishuv_id)
-  
+
   if (len_muni != len_yishuv && len_muni != 1 && len_yishuv != 1) {
     rlang::abort(
       c(
@@ -58,14 +64,20 @@ modify_muni_id <- function(muni_id, yishuv_id){
       class = "modify_muni_id_length_mismatch"
     )
   }
-  
-  if (is.numeric(muni_id))
-    muni_id <- as.character(muni_id)
-  if (is.numeric(yishuv_id))
-    yishuv_id <- as.character(yishuv_id)
-  
-  dplyr::case_when(
-    (muni_id == "0" | muni_id == "99") ~ yishuv_id,
-    TRUE ~ stringr::str_pad(muni_id, width = 2, side = "left", pad = "0")
+
+  if (is.numeric(muni_id)) muni_id <- as.character(muni_id)
+  if (is.numeric(yishuv_id)) yishuv_id <- as.character(yishuv_id)
+
+  # Recycle to a common length first so the condition and both branches are the
+  # same size. `dplyr::case_when()` warned (deprecated since dplyr 1.2.0) when a
+  # length-1 condition was paired with a longer replacement.
+  n <- max(length(muni_id), length(yishuv_id))
+  muni_id <- rep_len(muni_id, n)
+  yishuv_id <- rep_len(yishuv_id, n)
+
+  dplyr::if_else(
+    muni_id == "0" | muni_id == "99",
+    yishuv_id,
+    stringr::str_pad(muni_id, width = 2, side = "left", pad = "0")
   )
 }

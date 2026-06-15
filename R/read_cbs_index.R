@@ -1,10 +1,23 @@
 #' Read a CBS index data file to a tibble
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' This function is a wrapper around `readxl::read_excel()`, reading a specific
 #' CBS index data file for a specific year and a specific data domain. Its added
 #' value is in its pre-defined parameters for every year and its specific quirks
 #' in the Excel headers. For advanced users,the full set of options is available
 #' with `il.cbs.muni:::df_cbs_index_params`.
+#'
+#' This function is marked experimental because the CBS index publications are
+#' not stable across editions: the same geographic level (`unit_type`) is found
+#' in different table numbers in different years, the file format alternates
+#' between `xls` and `xlsx`, and some editions split a level across several
+#' tables. The function does not pick the file for you - it only knows how to
+#' read the headers - so you must download the file that matches `unit_type` for
+#' the requested `year`. Always sanity-check the row count after reading
+#' (municipalities are about 255 rows, localities about 1,000, statistical areas
+#' about 1,600).
 #'
 #' @param path A character vector of length 1, denoting the local file path to the
 #'  CBS index data file. A full list of available files by the CBS is at the
@@ -45,7 +58,8 @@
 #' ) |>
 #'   dplyr::glimpse()
 read_cbs_index <- function(
-  path, year,
+  path,
+  year,
   index_type = c("ses", "peri"),
   unit_type = c("muni", "yishuv", "sa"),
   cols = NULL,
@@ -58,7 +72,7 @@ read_cbs_index <- function(
       class = "read_cbs_index_invalid_path"
     )
   }
-  
+
   if (!file.exists(path)) {
     rlang::abort(
       c(
@@ -68,7 +82,7 @@ read_cbs_index <- function(
       class = "read_cbs_index_path_not_found"
     )
   }
-  
+
   # Validate year
   if (!is.numeric(year) || length(year) != 1) {
     rlang::abort(
@@ -76,7 +90,7 @@ read_cbs_index <- function(
       class = "read_cbs_index_invalid_year"
     )
   }
-  
+
   # Validate col_names if provided
   if (!is.null(col_names) && !is.character(col_names)) {
     rlang::abort(
@@ -84,9 +98,11 @@ read_cbs_index <- function(
       class = "read_cbs_index_invalid_col_names"
     )
   }
-  
+
   index_type <- rlang::arg_match(index_type)
   unit_type <- rlang::arg_match(unit_type)
+
+  lifecycle::signal_stage("experimental", "read_cbs_index()")
 
   params <- df_cbs_index_params |>
     dplyr::filter(
@@ -95,7 +111,40 @@ read_cbs_index <- function(
       unit_type == {{ unit_type }}
     )
 
-  stopifnot(nrow(params) == 1)
+  if (nrow(params) != 1) {
+    supported <- df_cbs_index_params |>
+      dplyr::filter(
+        index_type == {{ index_type }},
+        unit_type == {{ unit_type }}
+      ) |>
+      dplyr::pull("year") |>
+      sort()
+    rlang::abort(
+      c(
+        "No built-in parameters for this combination.",
+        "i" = paste0(
+          "Requested: year = ",
+          year,
+          ", index_type = \"",
+          index_type,
+          "\", unit_type = \"",
+          unit_type,
+          "\"."
+        ),
+        "i" = if (length(supported) > 0) {
+          paste0(
+            "Supported years for this index_type/unit_type: ",
+            paste(supported, collapse = ", "),
+            "."
+          )
+        } else {
+          "This index_type/unit_type combination is not supported for any year."
+        },
+        "i" = "See `il.cbs.muni:::df_cbs_index_params` for all supported combinations."
+      ),
+      class = "read_cbs_index_unsupported"
+    )
+  }
 
   df <- readxl::read_excel(
     path = path,

@@ -21,6 +21,12 @@
 #' `c("physical", "budget", "summary", "labor_force_survey", "social_survey")`.
 #' Every Excel municipal data file has a few different data domains, most notably
 #' physical and population data, and budget data.
+#' @param keep_summary_rows `r lifecycle::badge("experimental")` A logical vector
+#' of length 1. From 2022 onwards the `"physical"` and `"budget"` sheets open with
+#' aggregate summary rows (national total and one row per municipal status) that
+#' have no authority symbol. When `FALSE` (the default) these rows are dropped so
+#' that every returned row is a single municipality, matching earlier years. Set
+#' to `TRUE` to keep them. Has no effect on other data domains.
 #' @param cols <[tidy-select](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)>
 #'  Columns to keep. The default `NULL` keeps all columns.
 #' @param col_names A character vector containing the new column names of the
@@ -47,13 +53,20 @@
 #'   dplyr::select(1:15) |>
 #'   dplyr::glimpse()
 read_cbs_muni <- function(
-    path, year,
-    muni_type = c("all", "city_lc", "rc"),
-    data_domain = c("physical", "budget", "summary", "labor_force_survey", "social_survey"),
-    cols = NULL,
-    col_names = NULL
-  ) {
-
+  path,
+  year,
+  muni_type = c("all", "city_lc", "rc"),
+  data_domain = c(
+    "physical",
+    "budget",
+    "summary",
+    "labor_force_survey",
+    "social_survey"
+  ),
+  keep_summary_rows = FALSE,
+  cols = NULL,
+  col_names = NULL
+) {
   # Validate path
   if (!is.character(path) || length(path) != 1) {
     rlang::abort(
@@ -61,7 +74,7 @@ read_cbs_muni <- function(
       class = "read_cbs_muni_invalid_path"
     )
   }
-  
+
   if (!file.exists(path)) {
     rlang::abort(
       c(
@@ -71,7 +84,7 @@ read_cbs_muni <- function(
       class = "read_cbs_muni_path_not_found"
     )
   }
-  
+
   # Validate year
   if (!is.numeric(year) || length(year) != 1) {
     rlang::abort(
@@ -79,12 +92,24 @@ read_cbs_muni <- function(
       class = "read_cbs_muni_invalid_year"
     )
   }
-  
+
   # Validate col_names if provided
   if (!is.null(col_names) && !is.character(col_names)) {
     rlang::abort(
       "`col_names` must be NULL or a character vector.",
       class = "read_cbs_muni_invalid_col_names"
+    )
+  }
+
+  # Validate keep_summary_rows
+  if (
+    !is.logical(keep_summary_rows) ||
+      length(keep_summary_rows) != 1 ||
+      is.na(keep_summary_rows)
+  ) {
+    rlang::abort(
+      "`keep_summary_rows` must be a single logical value (TRUE or FALSE).",
+      class = "read_cbs_muni_invalid_keep_summary_rows"
     )
   }
 
@@ -98,7 +123,40 @@ read_cbs_muni <- function(
       data_domain == {{ data_domain }}
     )
 
-  stopifnot(nrow(params) == 1)
+  if (nrow(params) != 1) {
+    supported <- df_cbs_muni_params |>
+      dplyr::filter(
+        muni_type == {{ muni_type }},
+        data_domain == {{ data_domain }}
+      ) |>
+      dplyr::pull("year") |>
+      sort()
+    rlang::abort(
+      c(
+        "No built-in parameters for this combination.",
+        "i" = paste0(
+          "Requested: year = ",
+          year,
+          ", muni_type = \"",
+          muni_type,
+          "\", data_domain = \"",
+          data_domain,
+          "\"."
+        ),
+        "i" = if (length(supported) > 0) {
+          paste0(
+            "Supported years for this muni_type/data_domain: ",
+            paste(supported, collapse = ", "),
+            "."
+          )
+        } else {
+          "This muni_type/data_domain combination is not supported for any year."
+        },
+        "i" = "See `il.cbs.muni:::df_cbs_muni_params` for all supported combinations."
+      ),
+      class = "read_cbs_muni_unsupported"
+    )
+  }
 
   df <- readxl::read_excel(
     path = path,
@@ -106,13 +164,20 @@ read_cbs_muni <- function(
     col_names = FALSE,
     col_types = "text"
   ) |>
-  suppressMessages() |>
-  row_to_names_fill(
-    row_number = unlist(params$col_names_row_number),
-    fill_missing = unlist(params$fill_missing)
-  ) |>
+    suppressMessages() |>
+    row_to_names_fill(
+      row_number = unlist(params$col_names_row_number),
+      fill_missing = unlist(params$fill_missing)
+    ) |>
     janitor::remove_empty("rows", cutoff = 0.1)
 
+  # From 2022 the physical and budget sheets open with aggregate summary rows
+  # (national total and one per municipal status) that carry no authority symbol
+  # in the second column. Drop them unless the user asks to keep them, so every
+  # row is a single municipality as documented.
+  if (!keep_summary_rows && data_domain %in% c("physical", "budget")) {
+    df <- drop_summary_rows(df, symbol_col = 2)
+  }
 
   if (!rlang::quo_is_null(rlang::enquo(cols))) {
     df <- df |>
@@ -128,4 +193,17 @@ read_cbs_muni <- function(
   }
 
   df
+}
+
+# Drop CBS aggregate summary rows (national total and per municipal-status
+# subtotals). They are identified by an empty authority symbol in `symbol_col`,
+# whereas every real municipality has a symbol there. Returns `df` unchanged if
+# it has fewer than `symbol_col` columns.
+drop_summary_rows <- function(df, symbol_col = 2) {
+  if (ncol(df) < symbol_col) {
+    return(df)
+  }
+  symbol <- df[[symbol_col]]
+  keep <- !is.na(symbol) & trimws(symbol) != ""
+  df[keep, , drop = FALSE]
 }

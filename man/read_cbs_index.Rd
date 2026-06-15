@@ -49,11 +49,23 @@ and only single whitespaces are kept. Rows with more than 90\% empty cells (usua
 rows with non-data notes) are removed.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 This function is a wrapper around \code{readxl::read_excel()}, reading a specific
 CBS index data file for a specific year and a specific data domain. Its added
 value is in its pre-defined parameters for every year and its specific quirks
 in the Excel headers. For advanced users,the full set of options is available
 with \code{il.cbs.muni:::df_cbs_index_params}.
+
+This function is marked experimental because the CBS index publications are
+not stable across editions: the same geographic level (\code{unit_type}) is found
+in different table numbers in different years, the file format alternates
+between \code{xls} and \code{xlsx}, and some editions split a level across several
+tables. The function does not pick the file for you - it only knows how to
+read the headers - so you must download the file that matches \code{unit_type} for
+the requested \code{year}. Always sanity-check the row count after reading
+(municipalities are about 255 rows, localities about 1,000, statistical areas
+about 1,600).
 }
 \examples{
 read_cbs_index(

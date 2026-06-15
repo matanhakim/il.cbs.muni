@@ -1,6 +1,6 @@
 Package: il.cbs.muni
 Title: Utility Functions to Work with Israeli Central Bureau of Statistics Municipal Data
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
     person("Matan", "Hakim", , "matanhakim@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0009-0002-9372-8975"))
@@ -14,6 +14,7 @@ RoxygenNote: 7.3.3
 Imports: 
     dplyr,
     janitor,
+    lifecycle,
     purrr,
     readxl,
     rlang,

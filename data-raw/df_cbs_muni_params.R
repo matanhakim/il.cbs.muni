@@ -1,7 +1,22 @@
 ## code to prepare `df_cbs_muni_params` dataset
+##
+## One row per (year, muni_type, data_domain). `sheet_number`,
+## `col_names_row_number` and `fill_missing` describe how to locate and assemble
+## the header rows in each annual workbook. `fill_missing` must be length 1 or
+## the same length as `col_names_row_number`; this invariant is guarded by
+## tests/testthat/test-cbs_params.R.
+##
+## Coverage notes:
+## * physical / budget: 2016-2024. From 2022 the workbooks gained leading
+##   aggregate rows (national + by-status); `read_cbs_muni()` drops them via the
+##   empty authority-symbol column unless `keep_summary_rows = TRUE`.
+## * summary: 2011-2021 only. The dedicated "סיכומים לפי מעמד מוניציפלי" sheet
+##   was removed in 2022; those figures now live in the aggregate rows.
+## * labor_force_survey / social_survey: 2017-2024. The two survey sheets swapped
+##   order in 2022, reflected in `sheet_number`.
 
 df_physical <- tibble::tibble(
-  year = 2016:2023,
+  year = 2016:2024,
   muni_type = rep("all", length(year)),
   data_domain = rep("physical", length(year)),
   sheet_number = rep(2, length(year)),
@@ -10,7 +25,7 @@ df_physical <- tibble::tibble(
 )
 
 df_budget <- tibble::tibble(
-  year = 2016:2023,
+  year = 2016:2024,
   muni_type = rep("all", length(year)),
   data_domain = rep("budget", length(year)),
   sheet_number = rep(3, length(year)),
@@ -22,7 +37,8 @@ df_budget <- tibble::tibble(
     list(3:7), # 2020
     list(4), # 2021
     list(4), # 2022
-    list(4) # 2023
+    list(4), # 2023
+    list(4) # 2024
   ),
   fill_missing = c(
     list(c(TRUE, TRUE, FALSE)), # 2016
@@ -32,7 +48,8 @@ df_budget <- tibble::tibble(
     list(c(TRUE, FALSE, FALSE, FALSE, FALSE)), # 2020
     list(c(TRUE)), # 2021
     list(c(TRUE)), # 2022
-    list(c(TRUE)) # 2023
+    list(c(TRUE)), # 2023
+    list(c(TRUE)) # 2024
   )
 )
 
@@ -53,27 +70,27 @@ df_summary <- tibble::tibble(
 )
 
 df_labor_force_survey <- tibble::tibble(
-  year = 2017:2023,
+  year = 2017:2024,
   muni_type = rep("all", length(year)),
   data_domain = rep("labor_force_survey", length(year)),
   sheet_number = c(
     rep(5, 5), # 2017-2021
-    rep(4, length(year) - 5) # 2022-2023
+    rep(4, length(year) - 5) # 2022-2024
   ),
-  col_names_row_number = rep(list(c(2, 4:5)), length(year)), # 2017-2023
-  fill_missing = rep(list(c(TRUE, TRUE, FALSE)), length(year)) # 2017-2023
+  col_names_row_number = rep(list(c(2, 4:5)), length(year)), # 2017-2024
+  fill_missing = rep(list(c(TRUE, TRUE, FALSE)), length(year)) # 2017-2024
 )
 
 df_social_survey <- tibble::tibble(
-  year = 2017:2023,
+  year = 2017:2024,
   muni_type = rep("all", length(year)),
   data_domain = rep("social_survey", length(year)),
   sheet_number = c(
     rep(4, 5), # 2017-2021
-    rep(5, length(year) - 5) # 2022-2023
+    rep(5, length(year) - 5) # 2022-2024
   ),
-  col_names_row_number = rep(list(c(4:5)), length(year)), # 2017-2023
-  fill_missing = rep(list(c(TRUE, FALSE)), length(year)) # 2017-2023
+  col_names_row_number = rep(list(c(4:5)), length(year)), # 2017-2024
+  fill_missing = rep(list(c(TRUE, FALSE)), length(year)) # 2017-2024
 )
 
 df_split_muni <- tibble::tibble(

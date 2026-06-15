@@ -13,3 +13,5 @@
 ^.*\.Rcheck$
 ^.*\.tar\.gz$
 ^CRAN-SUBMISSION$
+^diagnostics$
+^\.Rhistory$

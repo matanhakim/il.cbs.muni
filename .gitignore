@@ -4,3 +4,6 @@
 .httr-oauth
 .DS_Store
 docs
+
+# local diagnostics working dir (downloaded CBS files, analysis scripts)
+diagnostics/

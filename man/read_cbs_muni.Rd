@@ -9,6 +9,7 @@ read_cbs_muni(
   year,
   muni_type = c("all", "city_lc", "rc"),
   data_domain = c("physical", "budget", "summary", "labor_force_survey", "social_survey"),
+  keep_summary_rows = FALSE,
   cols = NULL,
   col_names = NULL
 )
@@ -32,6 +33,13 @@ chooses which sheet you would read.}
 \code{c("physical", "budget", "summary", "labor_force_survey", "social_survey")}.
 Every Excel municipal data file has a few different data domains, most notably
 physical and population data, and budget data.}
+
+\item{keep_summary_rows}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}} A logical vector
+of length 1. From 2022 onwards the \code{"physical"} and \code{"budget"} sheets open with
+aggregate summary rows (national total and one row per municipal status) that
+have no authority symbol. When \code{FALSE} (the default) these rows are dropped so
+that every returned row is a single municipality, matching earlier years. Set
+to \code{TRUE} to keep them. Has no effect on other data domains.}
 
 \item{cols}{<\href{https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html}{tidy-select}>
 Columns to keep. The default \code{NULL} keeps all columns.}
