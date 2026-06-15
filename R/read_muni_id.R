@@ -19,6 +19,12 @@
 #' municipalities (for each of the `id_types` chosen) should be included. Be aware
 #' that some municipal names might differ between different agencies.
 #'
+#' @details
+#' Regional councils are returned with their 2-digit CBS code (e.g. `"38"`). The
+#' CBS started encoding them as a 4-digit `5500 + code` (e.g. `"5538"`) in the
+#' 2024 municipal file; to join to that data, recode the regional council ids
+#' yourself, for example with [modify_muni_id()].
+#'
 #' @return A tibble, where every row is a municipality and the columns include id's
 #' (and possibly names) of the municipalities from the chosen agencies.
 #' @export
@@ -29,7 +35,10 @@
 #'
 #' read_muni_id(id_types = c("muni", "edu"), include_names = TRUE) |>
 #'   dplyr::glimpse()
-read_muni_id <- function(id_types = c("muni", "edu", "tax"), include_names = FALSE) {
+read_muni_id <- function(
+  id_types = c("muni", "edu", "tax"),
+  include_names = FALSE
+) {
   # Validate id_types
   if (!is.character(id_types)) {
     rlang::abort(
@@ -37,7 +46,7 @@ read_muni_id <- function(id_types = c("muni", "edu", "tax"), include_names = FAL
       class = "read_muni_id_invalid_id_types"
     )
   }
-  
+
   valid_types <- c("muni", "edu", "tax")
   invalid_types <- setdiff(id_types, valid_types)
   if (length(invalid_types) > 0) {
@@ -45,14 +54,21 @@ read_muni_id <- function(id_types = c("muni", "edu", "tax"), include_names = FAL
       c(
         "`id_types` must contain only valid type values.",
         "i" = paste0("Valid types: ", paste(valid_types, collapse = ", ")),
-        "x" = paste0("Invalid types provided: ", paste(invalid_types, collapse = ", "))
+        "x" = paste0(
+          "Invalid types provided: ",
+          paste(invalid_types, collapse = ", ")
+        )
       ),
       class = "read_muni_id_invalid_type_values"
     )
   }
-  
+
   # Validate include_names
-  if (!is.logical(include_names) || length(include_names) != 1 || is.na(include_names)) {
+  if (
+    !is.logical(include_names) ||
+      length(include_names) != 1 ||
+      is.na(include_names)
+  ) {
     rlang::abort(
       "`include_names` must be a single logical value (TRUE or FALSE).",
       class = "read_muni_id_invalid_include_names"

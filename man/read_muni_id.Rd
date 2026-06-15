@@ -30,6 +30,12 @@ across different government organizations. This function allows you to read
 different municipality id's and names , so interchanging between the different
 specifications would be easier.
 }
+\details{
+Regional councils are returned with their 2-digit CBS code (e.g. \code{"38"}). The
+CBS started encoding them as a 4-digit \code{5500 + code} (e.g. \code{"5538"}) in the
+2024 municipal file; to join to that data, recode the regional council ids
+yourself, for example with \code{\link[=modify_muni_id]{modify_muni_id()}}.
+}
 \examples{
 read_muni_id() |>
   dplyr::glimpse()

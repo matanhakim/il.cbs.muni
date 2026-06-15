@@ -16,16 +16,37 @@
 #' number or character represents a regional council.
 #' @param yishuv_id A character or numeric vector representing the yishuv id.
 #' Should be 4 digits long according to the il.verse conventions.
+#' @param rc_code A character vector of length 1, one of `c("xx", "55xx")`,
+#' choosing how the regional council code is written, where `xx` stands for the
+#' council's 2-digit code. The CBS recoded regional councils in the 2024 municipal
+#' file from the 2-digit code (e.g. `"38"`) to a 4-digit code formed as `5500 +`
+#' that 2-digit code (e.g. `"5538"`).
 #'
-#' @return A character vector with 4 digits municipal id for cities and local councils
-#' and 2 digits municipal id for regional councils.
+#' * `"xx"` (the default) returns the 2-digit code. It matches [read_muni_id()]
+#' and CBS data up to and including 2023.
+#'
+#' * `"55xx"` returns the 4-digit code. Use it to match CBS data from 2024 onwards.
+#'
+#' Cities and local councils are unaffected; their id is the 4-digit `yishuv_id`
+#' under both options.
+#'
+#' @return A character vector of municipal ids: the 4-digit `yishuv_id` for cities
+#' and local councils, and the regional council code in the chosen `rc_code` form
+#' (2 digits for `"xx"`, 4 digits for `"55xx"`).
 #' @export
 #'
 #' @examples
-#' muni_id <- c(0, 99, 1, 2)
-#' yishuv_id <- c("0001", "1000", "1234", "1567")
-#' modify_muni_id(muni_id, yishuv_id)
-modify_muni_id <- function(muni_id, yishuv_id) {
+#' muni_id <- c(0, 99, 38, 69)
+#' yishuv_id <- c("0001", "1000", NA, NA)
+#' modify_muni_id(muni_id, yishuv_id) # regional councils as 38, 69
+#' modify_muni_id(muni_id, yishuv_id, rc_code = "55xx") # as 5538, 5569
+modify_muni_id <- function(
+  muni_id,
+  yishuv_id,
+  rc_code = c("xx", "55xx")
+) {
+  rc_code <- rlang::arg_match(rc_code)
+
   # Validate yishuv_id
   if (
     !is.character(yishuv_id) &&
@@ -75,9 +96,16 @@ modify_muni_id <- function(muni_id, yishuv_id) {
   muni_id <- rep_len(muni_id, n)
   yishuv_id <- rep_len(yishuv_id, n)
 
+  rc_id <- if (rc_code == "55xx") {
+    # CBS 2024+ form: regional council code = 5500 + the 2-digit code.
+    as.character(as.integer(muni_id) + 5500L)
+  } else {
+    stringr::str_pad(muni_id, width = 2, side = "left", pad = "0")
+  }
+
   dplyr::if_else(
     muni_id == "0" | muni_id == "99",
     yishuv_id,
-    stringr::str_pad(muni_id, width = 2, side = "left", pad = "0")
+    rc_id
   )
 }

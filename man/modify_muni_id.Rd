@@ -4,7 +4,7 @@
 \alias{modify_muni_id}
 \title{Modify a municipal id depending on the municipal status and yishuv id}
 \usage{
-modify_muni_id(muni_id, yishuv_id)
+modify_muni_id(muni_id, yishuv_id, rc_code = c("xx", "55xx"))
 }
 \arguments{
 \item{muni_id}{A character or numeric vector indicating the municipal status,
@@ -13,10 +13,25 @@ number or character represents a regional council.}
 
 \item{yishuv_id}{A character or numeric vector representing the yishuv id.
 Should be 4 digits long according to the il.verse conventions.}
+
+\item{rc_code}{A character vector of length 1, one of \code{c("xx", "55xx")},
+choosing how the regional council code is written, where \code{xx} stands for the
+council's 2-digit code. The CBS recoded regional councils in the 2024 municipal
+file from the 2-digit code (e.g. \code{"38"}) to a 4-digit code formed as \verb{5500 +}
+that 2-digit code (e.g. \code{"5538"}).
+\itemize{
+\item \code{"xx"} (the default) returns the 2-digit code. It matches \code{\link[=read_muni_id]{read_muni_id()}}
+and CBS data up to and including 2023.
+\item \code{"55xx"} returns the 4-digit code. Use it to match CBS data from 2024 onwards.
+}
+
+Cities and local councils are unaffected; their id is the 4-digit \code{yishuv_id}
+under both options.}
 }
 \value{
-A character vector with 4 digits municipal id for cities and local councils
-and 2 digits municipal id for regional councils.
+A character vector of municipal ids: the 4-digit \code{yishuv_id} for cities
+and local councils, and the regional council code in the chosen \code{rc_code} form
+(2 digits for \code{"xx"}, 4 digits for \code{"55xx"}).
 }
 \description{
 In the context of working with cbs municipal and yishuvim data, there is a
@@ -31,7 +46,8 @@ This function modifies a municipal status based on itself and the yishuv_id.
 It returns the correct municipal id after accounting for the "0" or "99" values.
 }
 \examples{
-muni_id <- c(0, 99, 1, 2)
-yishuv_id <- c("0001", "1000", "1234", "1567")
-modify_muni_id(muni_id, yishuv_id)
+muni_id <- c(0, 99, 38, 69)
+yishuv_id <- c("0001", "1000", NA, NA)
+modify_muni_id(muni_id, yishuv_id) # regional councils as 38, 69
+modify_muni_id(muni_id, yishuv_id, rc_code = "55xx") # as 5538, 5569
 }

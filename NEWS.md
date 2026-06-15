@@ -1,6 +1,8 @@
 # il.cbs.muni 0.2.0
 
+* `modify_muni_id()` gains a `rc_code` argument that chooses how a regional council code is written: `"xx"` (the default) keeps the 2-digit code (e.g. `38`), matching `read_muni_id()` and CBS data up to 2023, and `"55xx"` returns the 4-digit `5500 + code` form (e.g. `5538`) used in the CBS 2024 municipal file.
 * `modify_muni_id()` no longer emits a dplyr deprecation warning when recycling a length-1 input against a longer one.
+* `read_muni_id()` now returns 257 local authorities, adding the local councils צור הדסה and שער שומרון (these are administered under their parent authorities by the Ministry of Education, so their education symbol is `NA`).
 * `read_cbs_index()` no longer errors for the periphery index (any year) or for the SES 2013 municipal index; an internal `fill_missing` parameter whose length did not match the header rows made those calls fail before any data was read.
 * `read_cbs_index()` now supports the SES 2021 municipal index and is marked experimental, because the CBS index publications place the same geographic level in different table numbers across editions and alternate between xls and xlsx.
 * `read_cbs_index()` now raises an informative error that lists the supported years when called with an unsupported year, index_type or unit_type combination.
