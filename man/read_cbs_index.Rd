@@ -8,7 +8,7 @@ read_cbs_index(
   path,
   year,
   index_type = c("ses", "peri"),
-  unit_type = c("muni", "yishuv", "sa"),
+  unit_type = lifecycle::deprecated(),
   cols = NULL,
   col_names = NULL
 )
@@ -17,7 +17,9 @@ read_cbs_index(
 \item{path}{A character vector of length 1, denoting the local file path to the
 CBS index data file. A full list of available files by the CBS is at the
 relevant CBS page for either \href{https://www.cbs.gov.il/he/subjects/Pages/\%D7\%9E\%D7\%93\%D7\%93-\%D7\%97\%D7\%91\%D7\%A8\%D7\%AA\%D7\%99-\%D7\%9B\%D7\%9C\%D7\%9B\%D7\%9C\%D7\%99-\%D7\%A9\%D7\%9C-\%D7\%94\%D7\%A8\%D7\%A9\%D7\%95\%D7\%99\%D7\%95\%D7\%AA-\%D7\%94\%D7\%9E\%D7\%A7\%D7\%95\%D7\%9E\%D7\%99\%D7\%95\%D7\%AA.aspx}{Socio-Economic Status (SES)}
-or for \href{https://www.cbs.gov.il/he/subjects/Pages/\%D7\%9E\%D7\%93\%D7\%93-\%D7\%A4\%D7\%A8\%D7\%99\%D7\%A4\%D7\%A8\%D7\%99\%D7\%90\%D7\%9C\%D7\%99\%D7\%95\%D7\%AA-\%D7\%A9\%D7\%9C-\%D7\%A8\%D7\%A9\%D7\%95\%D7\%99\%D7\%95\%D7\%AA-\%D7\%9E\%D7\%A7\%D7\%95\%D7\%9E\%D7\%99\%D7\%95\%D7\%AA.aspx}{peripheral level}.}
+or for \href{https://www.cbs.gov.il/he/subjects/Pages/\%D7\%9E\%D7\%93\%D7\%93-\%D7\%A4\%D7\%A8\%D7\%99\%D7\%A4\%D7\%A8\%D7\%99\%D7\%90\%D7\%9C\%D7\%99\%D7\%95\%D7\%AA-\%D7\%A9\%D7\%9C-\%D7\%A8\%D7\%A9\%D7\%95\%D7\%99\%D7\%95\%D7\%AA-\%D7\%9E\%D7\%A7\%D7\%95\%D7\%9E\%D7\%99\%D7\%95\%D7\%AA.aspx}{peripheral level}.
+Read a single file per call; to read several files, iterate (e.g. with
+\code{\link[purrr:map]{purrr::map()}}).}
 
 \item{year}{A numeric vector of length 1 denoting which year the data file
 pointed in \code{path} is for. Be aware that the year in question is the year
@@ -25,13 +27,9 @@ pointed in \code{path} is for. Be aware that the year in question is the year
 
 \item{index_type}{A character vector of length 1, one of \code{c("ses", "peri")}.}
 
-\item{unit_type}{A character vector of length 1, one of \code{c("muni", "yishuv", "sa")}.
-\itemize{
-\item \code{"muni"} - every row is a municipality.
-\item \code{"yishuv"} - every row is a yishuv. In some years and indices this includes all yishuvim,
-in others only yishuvim within regional councils.
-\item \code{"sa"} - every row is a statistical area within a city or local council.
-}}
+\item{unit_type}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The geographic level is now
+detected from the file content, so this argument is ignored. It will be removed
+in a future version.}
 
 \item{cols}{<\href{https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html}{tidy-select}>
 Columns to keep. The default \code{NULL} keeps all columns.}
@@ -42,37 +40,36 @@ Must be the same length as the number of columns picked in \code{cols}.}
 }
 \value{
 A tibble with CBS index data for a specific year, where every row is a
-\code{unit_type} and every column is a different variable for this \code{unit_type} in
-that year. Be advised all columns are of type character, so you need to parse
-the data types yourself at will. Column names are merged from the relevant headers,
-and only single whitespaces are kept. Rows with more than 90\% empty cells (usually
-rows with non-data notes) are removed.
+single geographic unit (municipality, locality or statistical area, as detected)
+and every column is a different variable for that unit. The detected geographic
+level is also stored in the \code{"unit_type"} attribute of the result. Be advised
+all columns are of type character, so you need to parse the data types yourself
+at will. Column names are merged from the relevant headers, and only single
+whitespaces are kept. Rows with more than 80\% empty cells (usually rows with
+non-data notes) are removed.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
-This function is a wrapper around \code{readxl::read_excel()}, reading a specific
-CBS index data file for a specific year and a specific data domain. Its added
-value is in its pre-defined parameters for every year and its specific quirks
-in the Excel headers. For advanced users,the full set of options is available
-with \code{il.cbs.muni:::df_cbs_index_params}.
+This function is a wrapper around \code{readxl::read_excel()}, reading a CBS
+socio-economic or peripherality index data file for a specific year. Its added
+value is in figuring out the file's structure for you: it detects the
+geographic level of the file (municipality, locality or statistical area) from
+its contents and applies the matching header layout. The full set of header
+parameters is available with \code{il.cbs.muni:::df_cbs_index_params}.
 
-This function is marked experimental because the CBS index publications are
-not stable across editions: the same geographic level (\code{unit_type}) is found
-in different table numbers in different years, the file format alternates
-between \code{xls} and \code{xlsx}, and some editions split a level across several
-tables. The function does not pick the file for you - it only knows how to
-read the headers - so you must download the file that matches \code{unit_type} for
-the requested \code{year}. Always sanity-check the row count after reading
-(municipalities are about 255 rows, localities about 1,000, statistical areas
-about 1,600).
+This function is marked experimental because the CBS index publications are not
+stable across editions: the same geographic level lives in different table
+numbers in different years and the file format alternates between \code{xls} and
+\code{xlsx}. Detecting the level from the file content rather than relying on the
+table number makes the reader robust to that shuffle - you give it one file and
+it works out what the file is.
 }
 \examples{
 read_cbs_index(
   path = system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni"),
   year = 2019,
-  index_type = "ses",
-  unit_type = "muni"
+  index_type = "ses"
 ) |>
   dplyr::glimpse()
 }
