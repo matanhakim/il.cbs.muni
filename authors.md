@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/matanhakim/il.cbs.muni/blob/master/DESCRIPTION)
 
 Hakim M (2026). *il.cbs.muni: Utility Functions to Work with Israeli
-Central Bureau of Statistics Municipal Data*. R package version 0.1.0,
+Central Bureau of Statistics Municipal Data*. R package version 0.2.0,
 <https://github.com/matanhakim/il.cbs.muni>.
 
     @Manual{,
       title = {il.cbs.muni: Utility Functions to Work with Israeli Central Bureau of Statistics Municipal Data},
       author = {Matan Hakim},
       year = {2026},
-      note = {R package version 0.1.0},
+      note = {R package version 0.2.0},
       url = {https://github.com/matanhakim/il.cbs.muni},
     }

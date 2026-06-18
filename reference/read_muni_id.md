@@ -38,12 +38,25 @@ read_muni_id(id_types = c("muni", "edu", "tax"), include_names = FALSE)
 A tibble, where every row is a municipality and the columns include id's
 (and possibly names) of the municipalities from the chosen agencies.
 
+## Details
+
+The table is a fixed reference of 257 local authorities, reflecting the
+set of authorities current as of the 2024 CBS municipal file. It has no
+`year` argument, so when joining to an earlier year a handful of more
+recently created authorities will not match.
+
+Regional councils are returned with their 2-digit CBS code (e.g.
+`"38"`). The CBS started encoding them as a 4-digit `5500 + code` (e.g.
+`"5538"`) in the 2024 municipal file; to join to that data, recode the
+regional council ids yourself, for example with
+[`modify_muni_id()`](https://matanhakim.github.io/il.cbs.muni/reference/modify_muni_id.md).
+
 ## Examples
 
 ``` r
 read_muni_id() |>
   dplyr::glimpse()
-#> Rows: 255
+#> Rows: 257
 #> Columns: 3
 #> $ muni_id <chr> "0472", "0473", "0182", "2710", "0031", "2400", "1020", "3760"…
 #> $ edu_id  <chr> "4721", "4739", "1826", "27102", "315", "24000", "10207", "376…
@@ -51,7 +64,7 @@ read_muni_id() |>
 
 read_muni_id(id_types = c("muni", "edu"), include_names = TRUE) |>
   dplyr::glimpse()
-#> Rows: 255
+#> Rows: 257
 #> Columns: 4
 #> $ muni_id   <chr> "0472", "0473", "0182", "2710", "0031", "2400", "1020", "376…
 #> $ muni_name <chr> "אבו גוש", "אבו סנאן", "אבן יהודה", "אום אל-פחם", "אופקים", …

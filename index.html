@@ -7,12 +7,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Utility Functions to Work with Israeli Central Bureau of Statistics Municipal Data • il.cbs.muni</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Utility Functions to Work with Israeli Central Bureau of Statistics Municipal Data">
-<meta name="description" content="Analyst oriented utility functions to handle the different quirks of the Israeli CBS municipal data, harmonize id's and bring together data points from different years.">
-<meta property="og:description" content="Analyst oriented utility functions to handle the different quirks of the Israeli CBS municipal data, harmonize id's and bring together data points from different years.">
+<meta name="description" content="Read and harmonize the municipal and locality data files published by the Israeli Central Bureau of Statistics (CBS). The published files change their layout, sheet order and identifier schemes from year to year, and these utilities work around those quirks to return tidy data with consistent identifiers. The package also harmonizes the several identifier systems used for Israeli local authorities and brings together data points from different years and sources, and it includes readers for the socio-economic and peripherality index publications.">
+<meta property="og:description" content="Read and harmonize the municipal and locality data files published by the Israeli Central Bureau of Statistics (CBS). The published files change their layout, sheet order and identifier schemes from year to year, and these utilities work around those quirks to return tidy data with consistent identifiers. The package also harmonizes the several identifier systems used for Israeli local authorities and brings together data points from different years and sources, and it includes readers for the socio-economic and peripherality index publications.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">il.cbs.muni</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,56 +50,80 @@
 <div class="page-header"><h1 id="ilcbsmuni">il.cbs.muni<a class="anchor" aria-label="anchor" href="#ilcbsmuni"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
-<p>il.cbs.muni is an analyst-oriented utility package for working with Israeli Central Bureau of Statistics (CBS) municipal data. It provides tools to handle the different quirks of CBS data formats, harmonize IDs across different years, and combine data points from multiple sources.</p>
+
+<p>il.cbs.muni is an analyst-oriented utility package for working with Israeli Central Bureau of Statistics (CBS) municipal data. It provides tools to read the CBS data files, handle the quirks of their formats, harmonize IDs across different years, and combine data points from multiple sources.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install the released version of il.cbs.muni from <a href="https://CRAN.R-project.org" class="external-link">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"il.cbs.muni"</span><span class="op">)</span></span></code></pre></div>
-<p>Or install the development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>Or install the development version from <a href="https://github.com/matanhakim/il.cbs.muni" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"matanhakim/il.cbs.muni"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+<h2 id="reading-municipal-data">Reading municipal data<a class="anchor" aria-label="anchor" href="#reading-municipal-data"></a>
 </h2>
-<p>Let’s say we would like to work with the <a href="https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2021.xlsx" class="external-link">2021 yishuvim data</a> (‘yishuvim’ = points of residence) of the Israeli CBS. We will read the first two columns:</p>
+<p><code><a href="reference/read_cbs_muni.html">read_cbs_muni()</a></code> reads a CBS municipal data file for a given year and data domain. It knows the per-year layout quirks - which sheet holds each domain, which rows form the (often multi-row) headers, and the aggregate summary rows that CBS added from 2022 onwards - so every returned row is a single municipality. Years 2003 through 2024 are supported.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/matanhakim/il.cbs.muni" class="external-link">il.cbs.muni</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org" class="external-link">readxl</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">suppressMessages</a></span><span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># This is the specific path to the file in this package, but you can store it</span></span>
-<span><span class="co"># anywhere you want.</span></span>
-<span><span class="va">df_yishuvim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html" class="external-link">read_excel</a></span><span class="op">(</span><span class="st">"inst/extdata/bycode2021.xlsx"</span>, range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/cellranger/man/cell_cols.html" class="external-link">cell_cols</a></span><span class="op">(</span><span class="st">"A:B"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>yishuv_name <span class="op">=</span> <span class="fl">1</span>, yishuv_id <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">df_yishuvim</span></span>
-<span><span class="co">#&gt; # A tibble: 1,483 × 2</span></span>
-<span><span class="co">#&gt;    yishuv_name         yishuv_id</span></span>
-<span><span class="co">#&gt;    &lt;chr&gt;                   &lt;dbl&gt;</span></span>
-<span><span class="co">#&gt;  1 אבו ג'ווייעד (שבט)        967</span></span>
-<span><span class="co">#&gt;  2 אבו גוש                   472</span></span>
-<span><span class="co">#&gt;  3 אבו סנאן                  473</span></span>
-<span><span class="co">#&gt;  4 אבו סריחאן (שבט)          935</span></span>
-<span><span class="co">#&gt;  5 אבו עבדון (שבט)           958</span></span>
-<span><span class="co">#&gt;  6 אבו עמאר (שבט)           1042</span></span>
-<span><span class="co">#&gt;  7 אבו עמרה (שבט)            932</span></span>
-<span><span class="co">#&gt;  8 אבו קורינאת (יישוב)      1342</span></span>
-<span><span class="co">#&gt;  9 אבו קורינאת (שבט)         968</span></span>
-<span><span class="co">#&gt; 10 אבו רובייעה (שבט)         966</span></span>
-<span><span class="co">#&gt; # ℹ 1,473 more rows</span></span></code></pre></div>
-<p>As you can see, the id column has two problems:</p>
-<ol style="list-style-type: decimal">
-<li><p>It’s a numeric vector. This is problematic as our convention for an id throughout the il.verse is to have id’s as characters.</p></li>
-<li><p>Each yishuv id has a different length, ranging between 1-4. This is problematic since there is no difference between <code>67</code> and <code>0067</code>, and creates potential clashes between some cities and regional councils when working with municipal data. For example, <code>31</code> is the <strong>yishuv</strong> id of Ofakim, but also the <strong>municipal</strong> id of Nahal Sorek regional council. Therefore, the convention is to use 4-character-long id for <strong>every</strong> yishuv.</p></li>
-</ol>
-<p>using the <code><a href="reference/pad_yishuv_id.html">pad_yishuv_id()</a></code> function, we can fix this problem:</p>
+<span><span class="va">df_muni</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_cbs_muni.html">read_cbs_muni</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"p_libud_2021.xlsx"</span>, package <span class="op">=</span> <span class="st">"il.cbs.muni"</span><span class="op">)</span>,</span>
+<span>  year <span class="op">=</span> <span class="fl">2021</span>,</span>
+<span>  data_domain <span class="op">=</span> <span class="st">"physical"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df_muni</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 255</span></span>
+<span><span class="co">#&gt; Columns: 4</span></span>
+<span><span class="co">#&gt; $ `שם הרשות`            &lt;chr&gt; "אום אל-פחם", "אופקים", "אור יהודה", "אור עקיבא"…</span></span>
+<span><span class="co">#&gt; $ `כללי_סמל הרשות`      &lt;chr&gt; "2710", "0031", "2400", "1020", "2600", "1309", …</span></span>
+<span><span class="co">#&gt; $ כללי_מחוז             &lt;chr&gt; "חיפה", "הדרום", "תל אביב", "חיפה", "הדרום", "המ…</span></span>
+<span><span class="co">#&gt; $ `כללי_מעמד מוניציפלי` &lt;chr&gt; "עירייה", "עירייה", "עירייה", "עירייה", "עירייה"…</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="reading-index-data">Reading index data<a class="anchor" aria-label="anchor" href="#reading-index-data"></a>
+</h2>
+<p><code><a href="reference/read_cbs_index.html">read_cbs_index()</a></code> reads the socio-economic or peripherality index files. The CBS places the same geographic level in different table numbers across editions, so by default the function detects the level (municipality, locality or statistical area) from the file content and applies the matching header layout. When you already know the level, pass <code>unit_type</code> to override detection.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df_yishuvim</span> <span class="op">&lt;-</span> <span class="va">df_yishuvim</span> <span class="op">|&gt;</span> </span>
+<code class="sourceCode R"><span><span class="va">df_index</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_cbs_index.html">read_cbs_index</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"24_22_375t1.xlsx"</span>, package <span class="op">=</span> <span class="st">"il.cbs.muni"</span><span class="op">)</span>,</span>
+<span>  year <span class="op">=</span> <span class="fl">2019</span>,</span>
+<span>  index_type <span class="op">=</span> <span class="st">"ses"</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">df_index</span>, <span class="st">"unit_type"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "muni"</span></span>
+<span></span>
+<span><span class="va">df_index</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html" class="external-link">glimpse</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Rows: 255</span></span>
+<span><span class="co">#&gt; Columns: 4</span></span>
+<span><span class="co">#&gt; $ `מעמד מוניציפלי_MUNICIPAL STATUS` &lt;chr&gt; "68", "99", "99", "99", "69", "0", "…</span></span>
+<span><span class="co">#&gt; $ `סמל יישוב_CODE OF LOCALITY`      &lt;chr&gt; NA, "1192", "1054", "1059", NA, "379…</span></span>
+<span><span class="co">#&gt; $ `שם רשות מקומית`                  &lt;chr&gt; "נווה מדבר", "ערערה-בנגב", "תל שבע",…</span></span>
+<span><span class="co">#&gt; $ מחוז_DISTRICT                     &lt;chr&gt; "6", "6", "6", "6", "6", "7", "6", "…</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="harmonizing-identifiers">Harmonizing identifiers<a class="anchor" aria-label="anchor" href="#harmonizing-identifiers"></a>
+</h2>
+<p>CBS files use a numeric locality ID with a variable length, while the il.verse convention is a 4-character string. <code><a href="reference/pad_yishuv_id.html">pad_yishuv_id()</a></code> fixes that:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">df_yishuvim</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_cbs_yishuv.html">read_cbs_yishuv</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"bycode2021.xlsx"</span>, package <span class="op">=</span> <span class="st">"il.cbs.muni"</span><span class="op">)</span>,</span>
+<span>  cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html" class="external-link">rename</a></span><span class="op">(</span>yishuv_name <span class="op">=</span> <span class="fl">1</span>, yishuv_id <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>yishuv_id <span class="op">=</span> <span class="fu"><a href="reference/pad_yishuv_id.html">pad_yishuv_id</a></span><span class="op">(</span><span class="va">yishuv_id</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">df_yishuvim</span></span>
 <span><span class="co">#&gt; # A tibble: 1,483 × 2</span></span>
 <span><span class="co">#&gt;    yishuv_name         yishuv_id</span></span>
@@ -115,19 +139,14 @@
 <span><span class="co">#&gt;  9 אבו קורינאת (שבט)   0968     </span></span>
 <span><span class="co">#&gt; 10 אבו רובייעה (שבט)   0966     </span></span>
 <span><span class="co">#&gt; # ℹ 1,473 more rows</span></span></code></pre></div>
-<p>Now every yishuv id is a string exactly 4 characters long.</p>
-<p>We can verify this:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">df_yishuvim</span><span class="op">$</span><span class="va">yishuv_id</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_length.html" class="external-link">str_length</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/base/range.html" class="external-link">range</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 4 4</span></span></code></pre></div>
-<p>This solves a common problem when working with yishuvim data.</p>
+<p>This matters because there is no difference between <code>67</code> and <code>0067</code> once stored as a number, which creates clashes between some cities and regional councils when working with municipal data. For example, <code>31</code> is the <strong>yishuv</strong> ID of Ofakim, but also the <strong>municipal</strong> ID of Nahal Sorek regional council, so the convention is a 4-character ID for <strong>every</strong> yishuv.</p>
+<p>For regional councils, <code><a href="reference/modify_muni_id.html">modify_muni_id()</a></code> builds the municipal ID from the municipal status and locality ID, and its <code>rc_code</code> argument switches between the historical 2-digit code (e.g. <code>38</code>) and the 4-digit <code>5500 + code</code> form (e.g. <code>5538</code>) that CBS introduced in the 2024 municipal file.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=il.cbs.muni" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/matanhakim/il.cbs.muni/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/matanhakim/il.cbs.muni/issues" class="external-link">Report a bug</a></li>
 </ul>
@@ -156,7 +175,13 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=il.cbs.muni" class="external-link"><img src="https://www.r-pkg.org/badges/version/il.cbs.muni" alt="CRAN status"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>

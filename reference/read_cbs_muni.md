@@ -17,6 +17,7 @@ read_cbs_muni(
   year,
   muni_type = c("all", "city_lc", "rc"),
   data_domain = c("physical", "budget", "summary", "labor_force_survey", "social_survey"),
+  keep_summary_rows = FALSE,
   cols = NULL,
   col_names = NULL
 )
@@ -52,6 +53,16 @@ read_cbs_muni(
   Every Excel municipal data file has a few different data domains, most
   notably physical and population data, and budget data.
 
+- keep_summary_rows:
+
+  **\[experimental\]** A logical vector of length 1. From 2022 onwards
+  the `"physical"` and `"budget"` sheets open with aggregate summary
+  rows (national total and one row per municipal status) that have no
+  authority symbol. When `FALSE` (the default) these rows are dropped so
+  that every returned row is a single municipality, matching earlier
+  years. Set to `TRUE` to keep them. Has no effect on other data
+  domains.
+
 - cols:
 
   \<[tidy-select](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)\>
@@ -61,7 +72,9 @@ read_cbs_muni(
 
   A character vector containing the new column names of the output
   tibble. If `NULL` then the tibble uses the original column names. Must
-  be the same length as the number of columns picked in `cols`.
+  be the same length as the number of columns picked in `cols`. The
+  names are assigned by position, so they follow the data's column
+  order.
 
 ## Value
 
@@ -70,7 +83,7 @@ municipality and every column is a different variable for this
 municipality in that year. Be advised all columns are of type character,
 so you need to parse the data types yourself at will. Column names are
 merged from the relevant headers, and only single whitespaces are kept.
-Rows with more than 90% empty cells (usually rows with non-data notes)
+Rows that are 90% or more empty cells (usually rows with non-data notes)
 are removed.
 
 ## Examples
