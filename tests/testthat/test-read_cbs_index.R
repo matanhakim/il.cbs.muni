@@ -128,6 +128,37 @@ test_that("validates path, year, col_names and quiet", {
   )
 })
 
+test_that("reads a real locality (yishuv) index fixture via the override", {
+  df <- read_cbs_index(
+    test_path("fixtures", "ses_2019_yishuv_sample.xlsx"),
+    year = 2019,
+    index_type = "ses",
+    unit_type = "yishuv",
+    quiet = TRUE
+  )
+  expect_equal(attr(df, "unit_type"), "yishuv")
+  expect_equal(ncol(df), 8)
+  expect_equal(nrow(df), 9)
+  expect_equal(df |> names() |> dplyr::nth(7), "שם יישוב")
+})
+
+test_that("reads a real statistical-area (sa) index fixture via the override", {
+  df <- read_cbs_index(
+    test_path("fixtures", "ses_2019_sa_sample.xlsx"),
+    year = 2019,
+    index_type = "ses",
+    unit_type = "sa",
+    quiet = TRUE
+  )
+  expect_equal(attr(df, "unit_type"), "sa")
+  expect_equal(ncol(df), 8)
+  expect_equal(nrow(df), 8)
+  expect_equal(
+    df |> names() |> dplyr::nth(7),
+    "סמל אזור סטטיסטי_CODE OF STATISTICAL AREA"
+  )
+})
+
 test_that("cols selects and col_names renames; mismatched length errors", {
   path <- system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni")
   df <- read_cbs_index(

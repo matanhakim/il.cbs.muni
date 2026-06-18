@@ -195,6 +195,29 @@ test_that("drop_summary_rows treats whitespace-only symbols as summary rows", {
   expect_equal(out[[2]], c("2710", "0031"))
 })
 
+test_that("drops 2022+ aggregate summary rows end to end from a real-layout fixture", {
+  fx <- test_path("fixtures", "muni_2024_sample.xlsx")
+  def <- read_cbs_muni(fx, year = 2024, data_domain = "physical")
+  keep <- read_cbs_muni(
+    fx,
+    year = 2024,
+    data_domain = "physical",
+    keep_summary_rows = TRUE
+  )
+  expect_equal(nrow(keep) - nrow(def), 4)
+  expect_equal(sum(is.na(def[[2]]) | trimws(def[[2]]) == ""), 0)
+  expect_equal(def[[1]][1], "אום אל-פחם")
+
+  bud <- read_cbs_muni(fx, year = 2024, data_domain = "budget")
+  bud_keep <- read_cbs_muni(
+    fx,
+    year = 2024,
+    data_domain = "budget",
+    keep_summary_rows = TRUE
+  )
+  expect_equal(nrow(bud_keep) - nrow(bud), 4)
+})
+
 test_that("throws error for invalid col_names", {
   expect_error(
     read_cbs_muni(

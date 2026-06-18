@@ -1,10 +1,9 @@
 ## code to prepare `df_muni_id` dataset
 ##
-## NOTE (reproducibility): the source CSV below is read from the `main` branch of
-## a personal GitHub repository, so re-running this script can silently pick up a
-## changed upstream file. Before a release, pin the URL to a specific commit SHA
-## or tag, or vendor a dated snapshot, and prefer the authoritative data.gov.il
-## resource (see the commented-out block) when it is wired up.
+## NOTE (reproducibility): the source CSV is pinned to a specific commit SHA of a
+## personal GitHub repository so re-running this script reproduces the same data.
+## When refreshing the data, bump the SHA below to the new commit. Longer term,
+## prefer the authoritative data.gov.il resource (see the commented-out block).
 
 # df_muni_tax <- read.delim("clipboard", sep = " ")
 # req_muni_tax <- httr2::request("https://data.gov.il/api/3/action/datastore_search") |>
@@ -30,7 +29,7 @@
 #   )
 
 df_muni_id <- readr::read_csv(
-  "https://raw.githubusercontent.com/matanhakim/general_files/main/muni_ids.csv",
+  "https://raw.githubusercontent.com/matanhakim/general_files/a80f9c8d7bda97194bcb258960d7e22417bf608a/muni_ids.csv",
   col_types = readr::cols(.default = readr::col_character())
 ) |>
   dplyr::rename(
