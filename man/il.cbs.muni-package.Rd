@@ -6,7 +6,7 @@
 \alias{il.cbs.muni-package}
 \title{il.cbs.muni: Utility Functions to Work with Israeli Central Bureau of Statistics Municipal Data}
 \description{
-Analyst oriented utility functions to handle the different quirks of the Israeli CBS municipal data, harmonize id's and bring together data points from different years.
+Read and harmonize the municipal and locality data files published by the Israeli Central Bureau of Statistics (CBS). The published files change their layout, sheet order and identifier schemes from year to year, and these utilities work around those quirks to return tidy data with consistent identifiers. The package also harmonizes the several identifier systems used for Israeli local authorities and brings together data points from different years and sources, and it includes readers for the socio-economic and peripherality index publications.
 }
 \seealso{
 Useful links:

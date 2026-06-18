@@ -2,3 +2,22 @@ url: https://matanhakim.github.io/il.cbs.muni/
 template:
   bootstrap: 5
 
+reference:
+- title: Read CBS data files
+  desc: Read municipal, locality and index data files into tidy tibbles.
+  contents:
+  - read_cbs_muni
+  - read_cbs_index
+  - read_cbs_yishuv
+  - combine_cbs_muni
+- title: Identifiers
+  desc: Harmonize and reshape Israeli local-authority and locality identifiers.
+  contents:
+  - read_muni_id
+  - modify_muni_id
+  - pad_yishuv_id
+- title: Helpers
+  desc: Lower-level utilities used by the readers.
+  contents:
+  - clean_name
+  - row_to_names_fill

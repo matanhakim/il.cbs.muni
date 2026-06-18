@@ -77,3 +77,50 @@ test_that("throws error for invalid col_names", {
     class = "combine_cbs_muni_invalid_col_names"
   )
 })
+
+test_that("combines the budget domain and takes names from the rc sheet", {
+  df <- combine_cbs_muni(
+    system.file("extdata", "2009.xls", package = "il.cbs.muni"),
+    year = 2009,
+    cols_city = 1:5,
+    cols_rc = 1:5,
+    data_domain = "budget",
+    col_names_from = "rc"
+  )
+  expect_equal(ncol(df), 5)
+  expect_equal(nrow(df), 242)
+  expect_equal(df |> names() |> dplyr::nth(1), "שם הרשות")
+})
+
+test_that("explicit col_names override both sheets", {
+  df <- combine_cbs_muni(
+    system.file("extdata", "2009.xls", package = "il.cbs.muni"),
+    year = 2009,
+    cols_city = 1:3,
+    cols_rc = 1:3,
+    col_names = c("name", "symbol", "district")
+  )
+  expect_equal(names(df), c("name", "symbol", "district"))
+})
+
+test_that("errors when cols_city and cols_rc select different numbers of columns", {
+  expect_error(
+    combine_cbs_muni(
+      system.file("extdata", "2009.xls", package = "il.cbs.muni"),
+      year = 2009,
+      cols_city = c(1, 2, 3),
+      cols_rc = c(1, 2)
+    ),
+    class = "combine_cbs_muni_cols_length_mismatch"
+  )
+})
+
+test_that("errors when the column selections are missing", {
+  expect_error(
+    combine_cbs_muni(
+      system.file("extdata", "2009.xls", package = "il.cbs.muni"),
+      year = 2009
+    ),
+    class = "combine_cbs_muni_missing_cols"
+  )
+})

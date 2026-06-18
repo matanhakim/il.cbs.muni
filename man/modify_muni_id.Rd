@@ -26,7 +26,9 @@ and CBS data up to and including 2023.
 }
 
 Cities and local councils are unaffected; their id is the 4-digit \code{yishuv_id}
-under both options.}
+under both options. For \code{"55xx"}, \code{muni_id} is expected to hold a regional
+council's 2-digit code (or \code{"0"}/\code{"99"} for a city or local council); values
+outside that range are recoded as \code{5500 + muni_id} without further checking.}
 }
 \value{
 A character vector of municipal ids: the 4-digit \code{yishuv_id} for cities

@@ -72,6 +72,7 @@ df_1 <- combine_cbs_muni(
 df_1 |>
   dplyr::glimpse()
 
+\donttest{
 df_2 <- combine_cbs_muni(
   system.file("extdata", "2009.xls", package = "il.cbs.muni"),
   year = 2009,
@@ -83,4 +84,5 @@ df_2 <- combine_cbs_muni(
 
 df_2 |>
   dplyr::glimpse()
+}
 }

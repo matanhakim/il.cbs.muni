@@ -29,6 +29,12 @@ test_that("works with vectors", {
   )
 })
 
+test_that("recognises zero-padded city and local-council codes", {
+  expect_equal(modify_muni_id("00", "1234"), "1234")
+  expect_equal(modify_muni_id("099", "1234"), "1234")
+  expect_equal(modify_muni_id("00", "1234", rc_code = "55xx"), "1234")
+})
+
 test_that("handles NA correctly", {
   expect_equal(modify_muni_id(NA, "1234"), NA_character_)
   expect_equal(modify_muni_id("0", NA), NA_character_)

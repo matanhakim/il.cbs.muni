@@ -31,13 +31,14 @@
 #'  Columns to keep. The default `NULL` keeps all columns.
 #' @param col_names A character vector containing the new column names of the
 #' output tibble. If `NULL` then the tibble uses the original column names.
-#' Must be the same length as the number of columns picked in `cols`.
+#' Must be the same length as the number of columns picked in `cols`. The names
+#' are assigned by position, so they follow the data's column order.
 #'
 #' @return A tibble with municipal data for a specific year, where every row is a
 #' municipality and every column is a different variable for this municipality in
 #' that year. Be advised all columns are of type character, so you need to parse
 #' the data types yourself at will. Column names are merged from the relevant headers,
-#' and only single whitespaces are kept. Rows with more than 90% empty cells (usually
+#' and only single whitespaces are kept. Rows that are 90% or more empty cells (usually
 #' rows with non-data notes) are removed.
 #' @export
 #' @md
@@ -86,7 +87,7 @@ read_cbs_muni <- function(
   }
 
   # Validate year
-  if (!is.numeric(year) || length(year) != 1) {
+  if (!is.numeric(year) || length(year) != 1 || is.na(year)) {
     rlang::abort(
       "`year` must be a numeric vector of length 1.",
       class = "read_cbs_muni_invalid_year"
@@ -185,6 +186,16 @@ read_cbs_muni <- function(
   }
 
   if (!is.null(col_names)) {
+    if (length(col_names) != ncol(df)) {
+      rlang::abort(
+        c(
+          "`col_names` must have the same length as the number of selected columns.",
+          "i" = paste0("`col_names` length: ", length(col_names)),
+          "x" = paste0("Number of selected columns: ", ncol(df))
+        ),
+        class = "read_cbs_muni_col_names_length"
+      )
+    }
     names(df) <- col_names
   } else {
     names(df) <- df |>

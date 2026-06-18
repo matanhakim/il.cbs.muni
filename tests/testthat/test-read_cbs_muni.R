@@ -139,6 +139,60 @@ test_that("throws error for invalid year", {
     ),
     class = "read_cbs_muni_invalid_year"
   )
+
+  expect_error(
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = NA_real_,
+      data_domain = "physical"
+    ),
+    class = "read_cbs_muni_invalid_year"
+  )
+})
+
+test_that("reads the labor force and social survey domains", {
+  path <- system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni")
+  lfs <- read_cbs_muni(path, year = 2021, data_domain = "labor_force_survey")
+  expect_equal(nrow(lfs), 39)
+  expect_equal(ncol(lfs), 27)
+  ss <- read_cbs_muni(path, year = 2021, data_domain = "social_survey")
+  expect_equal(nrow(ss), 292)
+  expect_equal(ncol(ss), 7)
+})
+
+test_that("the summary domain is unsupported from 2022 onwards", {
+  expect_error(
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = 2024,
+      data_domain = "summary"
+    ),
+    class = "read_cbs_muni_unsupported"
+  )
+})
+
+test_that("col_names length must match the selected columns", {
+  expect_error(
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = 2021,
+      data_domain = "physical",
+      cols = c(1, 2),
+      col_names = "only_one"
+    ),
+    class = "read_cbs_muni_col_names_length"
+  )
+})
+
+test_that("drop_summary_rows treats whitespace-only symbols as summary rows", {
+  df <- data.frame(
+    name = c("total", "אום אל-פחם", "אופקים"),
+    symbol = c("  ", "2710", "0031"),
+    stringsAsFactors = FALSE
+  )
+  out <- drop_summary_rows(df, symbol_col = 2)
+  expect_equal(nrow(out), 2)
+  expect_equal(out[[2]], c("2710", "0031"))
 })
 
 test_that("throws error for invalid col_names", {

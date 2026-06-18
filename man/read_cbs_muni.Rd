@@ -46,14 +46,15 @@ Columns to keep. The default \code{NULL} keeps all columns.}
 
 \item{col_names}{A character vector containing the new column names of the
 output tibble. If \code{NULL} then the tibble uses the original column names.
-Must be the same length as the number of columns picked in \code{cols}.}
+Must be the same length as the number of columns picked in \code{cols}. The names
+are assigned by position, so they follow the data's column order.}
 }
 \value{
 A tibble with municipal data for a specific year, where every row is a
 municipality and every column is a different variable for this municipality in
 that year. Be advised all columns are of type character, so you need to parse
 the data types yourself at will. Column names are merged from the relevant headers,
-and only single whitespaces are kept. Rows with more than 90\% empty cells (usually
+and only single whitespaces are kept. Rows that are 90\% or more empty cells (usually
 rows with non-data notes) are removed.
 }
 \description{

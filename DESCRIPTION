@@ -4,9 +4,14 @@ Version: 0.2.0
 Authors@R: 
     person("Matan", "Hakim", , "matanhakim@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0009-0002-9372-8975"))
-Description: Analyst oriented utility functions to handle the different quirks of
-  the Israeli CBS municipal data, harmonize id's and bring together data points
-  from different years.
+Description: Read and harmonize the municipal and locality data files published
+  by the Israeli Central Bureau of Statistics (CBS). The published files change
+  their layout, sheet order and identifier schemes from year to year, and these
+  utilities work around those quirks to return tidy data with consistent
+  identifiers. The package also harmonizes the several identifier systems used
+  for Israeli local authorities and brings together data points from different
+  years and sources, and it includes readers for the socio-economic and
+  peripherality index publications.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -20,8 +25,7 @@ Imports:
     rlang,
     stringr,
     tidyr
-Suggests: 
-    httr2,
+Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 URL: https://github.com/matanhakim/il.cbs.muni,

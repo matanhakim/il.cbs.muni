@@ -2,26 +2,27 @@
 
 0 errors | 0 warnings | 0 notes
 
+## Submission notes
+
+This is an update from version 0.1.0, currently on CRAN, to version 0.2.0.
+
+This release adds support for the 2022-2024 CBS municipal data files and for the
+socio-economic and peripherality index files, fixes a crash in the index reader,
+and adds further input validation. See NEWS.md for the full list of changes.
+
 ## Test environments
 
 * Local Windows install, R 4.5.2
-* win-builder (devel and release) - to be run before submission
-* GitHub Actions (ubuntu-latest, windows-latest, macOS-latest), R release and devel - to be configured
-* rhub::check_for_cran() - to be run before submission
+* win-builder (devel and release)
+* GitHub Actions (ubuntu-latest, windows-latest, macOS-latest), R release and devel
+* rhub::check_for_cran()
 
-## Submission notes
+## Reverse dependencies
 
-This is the first submission of il.cbs.muni to CRAN.
+There are currently no reverse dependencies for this package.
 
-The package provides utility functions for working with Israeli Central Bureau of Statistics (CBS) municipal data. It helps analysts handle quirks in CBS data formats, harmonize IDs across different years, and combine data from multiple sources.
+## Method references
 
-All functions include:
-- Comprehensive input validation with informative error messages
-- Full documentation with examples
-- Unit tests (126 tests with 100% pass rate)
-
-The package depends on common tidyverse packages (dplyr, stringr, tidyr, readxl) and uses rlang for error handling.
-
-## Downstream dependencies
-
-There are currently no downstream dependencies for this package.
+There are no published references describing the methods in this package. It
+implements utilities for reading and harmonizing the data files published by the
+Israeli Central Bureau of Statistics.

@@ -4,6 +4,14 @@
 ## Excel rows that together form the column headers. `fill_missing` says, per
 ## header row, whether merged-cell gaps should be filled left-to-right.
 ##
+## Coverage (the editions with built-in parameters):
+## * ses  muni:   2013, 2015, 2017, 2019, 2021
+## * ses  yishuv: 2013, 2015, 2017, 2019
+## * ses  sa:     2017, 2019
+## * peri muni:   2004, 2015, 2020
+## * peri yishuv: 2015, 2020
+## To support a newer edition, add a row with the right header rows for its level.
+##
 ## `fill_missing` is a single `FALSE` (length 1, recycled to the length of
 ## `col_names_row_number`). It used to be a fixed length-2 vector, which silently
 ## mismatched the 4-row periphery headers and the 4-row SES 2013 header and made

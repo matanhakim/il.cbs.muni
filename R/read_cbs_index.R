@@ -5,10 +5,10 @@
 #'
 #' This function is a wrapper around `readxl::read_excel()`, reading a CBS
 #' socio-economic or peripherality index data file for a specific year. Its added
-#' value is in figuring out the file's structure for you: it detects the
-#' geographic level of the file (municipality, locality or statistical area) from
-#' its contents and applies the matching header layout. The full set of header
-#' parameters is available with `il.cbs.muni:::df_cbs_index_params`.
+#' value is in figuring out the file's structure for you: by default it detects
+#' the geographic level of the file (municipality, locality or statistical area)
+#' from its contents and applies the matching header layout. The full set of
+#' header parameters is available with `il.cbs.muni:::df_cbs_index_params`.
 #'
 #' This function is marked experimental because the CBS index publications are not
 #' stable across editions: the same geographic level lives in different table
@@ -16,6 +16,14 @@
 #' `xlsx`. Detecting the level from the file content rather than relying on the
 #' table number makes the reader robust to that shuffle - you give it one file and
 #' it works out what the file is.
+#'
+#' @details
+#' Detection uses the raw row count and a header keyword, which separates the
+#' three levels cleanly for the files published so far. It can still be wrong when
+#' a file does not match the expected geometry - for example a table that is not a
+#' standard index but happens to be municipality-sized, or two different tables in
+#' the same edition that share a row-count band. When you know the level, pass it
+#' explicitly through `unit_type` to bypass detection.
 #'
 #' @param path A character vector of length 1, denoting the local file path to the
 #'  CBS index data file. A full list of available files by the CBS is at the
@@ -27,23 +35,29 @@
 #' pointed in `path` is for. Be aware that the year in question is the year
 #' **the data is for**, not the year **the data was published in**.
 #' @param index_type A character vector of length 1, one of `c("ses", "peri")`.
-#' @param unit_type `r lifecycle::badge("deprecated")` The geographic level is now
-#' detected from the file content, so this argument is ignored. It will be removed
-#' in a future version.
+#' @param unit_type `NULL` (the default) or a character vector of length 1, one of
+#' `c("muni", "yishuv", "sa")`, denoting the geographic level: municipality,
+#' locality or statistical area. When `NULL`, the level is detected from the file
+#' content. When supplied, the given level is used as-is and detection is skipped,
+#' which lets you override a misdetection for a file whose level you already know.
 #' @param cols <[tidy-select](https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html)>
 #' Columns to keep. The default `NULL` keeps all columns.
 #' @param col_names A character vector containing the new column names of the
 #' output tibble. If `NULL` then the tibble uses the original column names.
-#' Must be the same length as the number of columns picked in `cols`.
+#' Must be the same length as the number of columns picked in `cols`. The names
+#' are assigned by position, so they follow the data's column order.
+#' @param quiet A logical vector of length 1. When `FALSE` (the default) a message
+#' reports the geographic level used. Set to `TRUE` to silence it, for example
+#' when iterating over many files.
 #'
 #' @return A tibble with CBS index data for a specific year, where every row is a
-#' single geographic unit (municipality, locality or statistical area, as detected)
-#' and every column is a different variable for that unit. The detected geographic
-#' level is also stored in the `"unit_type"` attribute of the result. Be advised
-#' all columns are of type character, so you need to parse the data types yourself
-#' at will. Column names are merged from the relevant headers, and only single
-#' whitespaces are kept. Rows with more than 80% empty cells (usually rows with
-#' non-data notes) are removed.
+#' single geographic unit (municipality, locality or statistical area) and every
+#' column is a different variable for that unit. The geographic level used is also
+#' stored in the `"unit_type"` attribute of the result. Be advised all columns are
+#' of type character, so you need to parse the data types yourself at will. Column
+#' names are merged from the relevant headers, and only single whitespaces are
+#' kept. Rows that are 80% or more empty cells (usually rows with non-data notes)
+#' are removed.
 #' @export
 #'
 #' @examples
@@ -57,9 +71,10 @@ read_cbs_index <- function(
   path,
   year,
   index_type = c("ses", "peri"),
-  unit_type = lifecycle::deprecated(),
+  unit_type = NULL,
   cols = NULL,
-  col_names = NULL
+  col_names = NULL,
+  quiet = FALSE
 ) {
   # Validate path
   if (!is.character(path) || length(path) != 1) {
@@ -80,7 +95,7 @@ read_cbs_index <- function(
   }
 
   # Validate year
-  if (!is.numeric(year) || length(year) != 1) {
+  if (!is.numeric(year) || length(year) != 1 || is.na(year)) {
     rlang::abort(
       "`year` must be a numeric vector of length 1.",
       class = "read_cbs_index_invalid_year"
@@ -95,14 +110,20 @@ read_cbs_index <- function(
     )
   }
 
+  # Validate quiet
+  if (!is.logical(quiet) || length(quiet) != 1 || is.na(quiet)) {
+    rlang::abort(
+      "`quiet` must be a single logical value (TRUE or FALSE).",
+      class = "read_cbs_index_invalid_quiet"
+    )
+  }
+
   index_type <- rlang::arg_match(index_type)
 
-  if (lifecycle::is_present(unit_type)) {
-    lifecycle::deprecate_warn(
-      when = "0.2.0",
-      what = "read_cbs_index(unit_type)",
-      details = "The geographic level is detected from the file content; `unit_type` is ignored."
-    )
+  # `unit_type` is an optional override. When supplied, validate it and use it
+  # as-is; otherwise detect the level from the file content.
+  if (!is.null(unit_type)) {
+    unit_type <- rlang::arg_match(unit_type, c("muni", "yishuv", "sa"))
   }
 
   lifecycle::signal_stage("experimental", "read_cbs_index()")
@@ -115,22 +136,34 @@ read_cbs_index <- function(
   ) |>
     suppressMessages()
 
-  unit_type <- detect_index_unit_type(raw)
-  rlang::inform(
-    paste0(
-      "Detected ",
-      switch(
-        unit_type,
-        muni = "municipality",
-        yishuv = "locality",
-        sa = "statistical area"
+  detected <- detect_index_unit_type(raw)
+  if (is.null(unit_type)) {
+    unit_type <- detected
+    verb <- "Detected"
+  } else {
+    verb <- "Using supplied"
+  }
+
+  if (!quiet) {
+    rlang::inform(
+      paste0(
+        verb,
+        " ",
+        switch(
+          unit_type,
+          muni = "municipality",
+          yishuv = "locality",
+          sa = "statistical area"
+        ),
+        "-level ",
+        index_type,
+        " index file (",
+        nrow(raw),
+        " raw rows)."
       ),
-      "-level ",
-      index_type,
-      " index file."
-    ),
-    class = "il.cbs.muni_detected_unit_type"
-  )
+      class = "il.cbs.muni_unit_type"
+    )
+  }
 
   params <- df_cbs_index_params |>
     dplyr::filter(
@@ -155,7 +188,7 @@ read_cbs_index <- function(
           year,
           ", index_type = \"",
           index_type,
-          "\"; detected unit_type = \"",
+          "\"; unit_type = \"",
           unit_type,
           "\"."
         ),
@@ -187,6 +220,16 @@ read_cbs_index <- function(
   }
 
   if (!is.null(col_names)) {
+    if (length(col_names) != ncol(df)) {
+      rlang::abort(
+        c(
+          "`col_names` must have the same length as the number of selected columns.",
+          "i" = paste0("`col_names` length: ", length(col_names)),
+          "x" = paste0("Number of selected columns: ", ncol(df))
+        ),
+        class = "read_cbs_index_col_names_length"
+      )
+    }
     names(df) <- col_names
   } else {
     names(df) <- df |>

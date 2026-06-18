@@ -28,7 +28,9 @@
 #' * `"55xx"` returns the 4-digit code. Use it to match CBS data from 2024 onwards.
 #'
 #' Cities and local councils are unaffected; their id is the 4-digit `yishuv_id`
-#' under both options.
+#' under both options. For `"55xx"`, `muni_id` is expected to hold a regional
+#' council's 2-digit code (or `"0"`/`"99"` for a city or local council); values
+#' outside that range are recoded as `5500 + muni_id` without further checking.
 #'
 #' @return A character vector of municipal ids: the 4-digit `yishuv_id` for cities
 #' and local councils, and the regional council code in the chosen `rc_code` form
@@ -98,14 +100,13 @@ modify_muni_id <- function(
 
   rc_id <- if (rc_code == "55xx") {
     # CBS 2024+ form: regional council code = 5500 + the 2-digit code.
-    as.character(as.integer(muni_id) + 5500L)
+    as.character(suppressWarnings(as.integer(muni_id)) + 5500L)
   } else {
     stringr::str_pad(muni_id, width = 2, side = "left", pad = "0")
   }
 
-  dplyr::if_else(
-    muni_id == "0" | muni_id == "99",
-    yishuv_id,
-    rc_id
-  )
+  # Cities ("0") and local councils ("99") return the yishuv id. Compare
+  # numerically so zero-padded forms such as "00" or "099" are also recognised.
+  is_city <- suppressWarnings(as.integer(muni_id)) %in% c(0L, 99L)
+  dplyr::if_else(is_city, yishuv_id, rc_id)
 }

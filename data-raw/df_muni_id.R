@@ -1,4 +1,10 @@
 ## code to prepare `df_muni_id` dataset
+##
+## NOTE (reproducibility): the source CSV below is read from the `main` branch of
+## a personal GitHub repository, so re-running this script can silently pick up a
+## changed upstream file. Before a release, pin the URL to a specific commit SHA
+## or tag, or vendor a dated snapshot, and prefer the authoritative data.gov.il
+## resource (see the commented-out block) when it is wired up.
 
 # df_muni_tax <- read.delim("clipboard", sep = " ")
 # req_muni_tax <- httr2::request("https://data.gov.il/api/3/action/datastore_search") |>

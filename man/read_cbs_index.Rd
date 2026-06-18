@@ -8,9 +8,10 @@ read_cbs_index(
   path,
   year,
   index_type = c("ses", "peri"),
-  unit_type = lifecycle::deprecated(),
+  unit_type = NULL,
   cols = NULL,
-  col_names = NULL
+  col_names = NULL,
+  quiet = FALSE
 )
 }
 \arguments{
@@ -27,36 +28,43 @@ pointed in \code{path} is for. Be aware that the year in question is the year
 
 \item{index_type}{A character vector of length 1, one of \code{c("ses", "peri")}.}
 
-\item{unit_type}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#deprecated}{\figure{lifecycle-deprecated.svg}{options: alt='[Deprecated]'}}}{\strong{[Deprecated]}} The geographic level is now
-detected from the file content, so this argument is ignored. It will be removed
-in a future version.}
+\item{unit_type}{\code{NULL} (the default) or a character vector of length 1, one of
+\code{c("muni", "yishuv", "sa")}, denoting the geographic level: municipality,
+locality or statistical area. When \code{NULL}, the level is detected from the file
+content. When supplied, the given level is used as-is and detection is skipped,
+which lets you override a misdetection for a file whose level you already know.}
 
 \item{cols}{<\href{https://dplyr.tidyverse.org/reference/dplyr_tidy_select.html}{tidy-select}>
 Columns to keep. The default \code{NULL} keeps all columns.}
 
 \item{col_names}{A character vector containing the new column names of the
 output tibble. If \code{NULL} then the tibble uses the original column names.
-Must be the same length as the number of columns picked in \code{cols}.}
+Must be the same length as the number of columns picked in \code{cols}. The names
+are assigned by position, so they follow the data's column order.}
+
+\item{quiet}{A logical vector of length 1. When \code{FALSE} (the default) a message
+reports the geographic level used. Set to \code{TRUE} to silence it, for example
+when iterating over many files.}
 }
 \value{
 A tibble with CBS index data for a specific year, where every row is a
-single geographic unit (municipality, locality or statistical area, as detected)
-and every column is a different variable for that unit. The detected geographic
-level is also stored in the \code{"unit_type"} attribute of the result. Be advised
-all columns are of type character, so you need to parse the data types yourself
-at will. Column names are merged from the relevant headers, and only single
-whitespaces are kept. Rows with more than 80\% empty cells (usually rows with
-non-data notes) are removed.
+single geographic unit (municipality, locality or statistical area) and every
+column is a different variable for that unit. The geographic level used is also
+stored in the \code{"unit_type"} attribute of the result. Be advised all columns are
+of type character, so you need to parse the data types yourself at will. Column
+names are merged from the relevant headers, and only single whitespaces are
+kept. Rows that are 80\% or more empty cells (usually rows with non-data notes)
+are removed.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
 
 This function is a wrapper around \code{readxl::read_excel()}, reading a CBS
 socio-economic or peripherality index data file for a specific year. Its added
-value is in figuring out the file's structure for you: it detects the
-geographic level of the file (municipality, locality or statistical area) from
-its contents and applies the matching header layout. The full set of header
-parameters is available with \code{il.cbs.muni:::df_cbs_index_params}.
+value is in figuring out the file's structure for you: by default it detects
+the geographic level of the file (municipality, locality or statistical area)
+from its contents and applies the matching header layout. The full set of
+header parameters is available with \code{il.cbs.muni:::df_cbs_index_params}.
 
 This function is marked experimental because the CBS index publications are not
 stable across editions: the same geographic level lives in different table
@@ -64,6 +72,14 @@ numbers in different years and the file format alternates between \code{xls} and
 \code{xlsx}. Detecting the level from the file content rather than relying on the
 table number makes the reader robust to that shuffle - you give it one file and
 it works out what the file is.
+}
+\details{
+Detection uses the raw row count and a header keyword, which separates the
+three levels cleanly for the files published so far. It can still be wrong when
+a file does not match the expected geometry - for example a table that is not a
+standard index but happens to be municipality-sized, or two different tables in
+the same edition that share a row-count band. When you know the level, pass it
+explicitly through \code{unit_type} to bypass detection.
 }
 \examples{
 read_cbs_index(

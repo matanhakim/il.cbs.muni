@@ -31,6 +31,11 @@ different municipality id's and names , so interchanging between the different
 specifications would be easier.
 }
 \details{
+The table is a fixed reference of 257 local authorities, reflecting the set of
+authorities current as of the 2024 CBS municipal file. It has no \code{year}
+argument, so when joining to an earlier year a handful of more recently
+created authorities will not match.
+
 Regional councils are returned with their 2-digit CBS code (e.g. \code{"38"}). The
 CBS started encoding them as a 4-digit \code{5500 + code} (e.g. \code{"5538"}) in the
 2024 municipal file; to join to that data, recode the regional council ids

@@ -75,6 +75,16 @@ read_cbs_yishuv <- function(path, cols = NULL, col_names = NULL) {
   }
 
   if (!is.null(col_names)) {
+    if (length(col_names) != ncol(df)) {
+      rlang::abort(
+        c(
+          "`col_names` must have the same length as the number of selected columns.",
+          "i" = paste0("`col_names` length: ", length(col_names)),
+          "x" = paste0("Number of selected columns: ", ncol(df))
+        ),
+        class = "read_cbs_yishuv_col_names_length"
+      )
+    }
     names(df) <- col_names
   } else {
     names(df) <- df |>
