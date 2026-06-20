@@ -50,7 +50,7 @@ test_that("handles NA correctly", {
 })
 
 test_that("throws error for invalid input type", {
-  expect_error(clean_name(1), class = "clean_name_invalid_type")
-  expect_error(clean_name(TRUE), class = "clean_name_invalid_type")
-  expect_error(clean_name(list("a", "b")), class = "clean_name_invalid_type")
+  expect_snapshot(error = TRUE, clean_name(1))
+  expect_snapshot(error = TRUE, clean_name(TRUE))
+  expect_snapshot(error = TRUE, clean_name(list("a", "b")))
 })

@@ -41,6 +41,8 @@ test_that("unit_type overrides detection and drives the matching read path", {
 })
 
 test_that("an invalid unit_type is rejected", {
+  # `unit_type` is validated by rlang::arg_match(); the message text is owned by
+  # rlang, so assert the class rather than snapshotting third-party wording.
   expect_error(
     read_cbs_index(
       system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni"),
@@ -88,46 +90,6 @@ test_that("detect_index_unit_type misreads a municipality-sized non-index table 
   expect_equal(detect_index_unit_type(wide), "muni")
 })
 
-test_that("throws an informative error for an unsupported combination", {
-  expect_error(
-    read_cbs_index(
-      path = system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni"),
-      year = 2099,
-      index_type = "ses",
-      quiet = TRUE
-    ),
-    class = "read_cbs_index_unsupported"
-  )
-})
-
-test_that("validates path, year, col_names and quiet", {
-  path <- system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni")
-  expect_error(
-    read_cbs_index(c("a", "b"), 2019, "ses"),
-    class = "read_cbs_index_invalid_path"
-  )
-  expect_error(
-    read_cbs_index("nonexistent.xlsx", 2019, "ses"),
-    class = "read_cbs_index_path_not_found"
-  )
-  expect_error(
-    read_cbs_index(path, "2019", "ses"),
-    class = "read_cbs_index_invalid_year"
-  )
-  expect_error(
-    read_cbs_index(path, NA_real_, "ses"),
-    class = "read_cbs_index_invalid_year"
-  )
-  expect_error(
-    read_cbs_index(path, 2019, "ses", col_names = 1),
-    class = "read_cbs_index_invalid_col_names"
-  )
-  expect_error(
-    read_cbs_index(path, 2019, "ses", quiet = "yes"),
-    class = "read_cbs_index_invalid_quiet"
-  )
-})
-
 test_that("reads a real locality (yishuv) index fixture via the override", {
   df <- read_cbs_index(
     test_path("fixtures", "ses_2019_yishuv_sample.xlsx"),
@@ -159,10 +121,9 @@ test_that("reads a real statistical-area (sa) index fixture via the override", {
   )
 })
 
-test_that("cols selects and col_names renames; mismatched length errors", {
-  path <- system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni")
+test_that("cols selects and col_names renames", {
   df <- read_cbs_index(
-    path,
+    system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni"),
     2019,
     "ses",
     cols = c(1, 3),
@@ -170,28 +131,53 @@ test_that("cols selects and col_names renames; mismatched length errors", {
     quiet = TRUE
   )
   expect_equal(names(df), c("status", "name"))
-  expect_error(
-    read_cbs_index(
-      path,
-      2019,
-      "ses",
-      cols = c(1, 2),
-      col_names = "only_one",
-      quiet = TRUE
-    ),
-    class = "read_cbs_index_col_names_length"
-  )
 })
 
-test_that("an unsupported index_type/unit_type combination errors", {
-  expect_error(
+test_that("an unsupported year/unit_type combination errors informatively", {
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_index(
+      system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni"),
+      year = 2099,
+      index_type = "ses",
+      quiet = TRUE
+    )
+  )
+  expect_snapshot(
+    error = TRUE,
     read_cbs_index(
       system.file("extdata", "24_22_420t1.xlsx", package = "il.cbs.muni"),
       year = 2099,
       index_type = "peri",
       unit_type = "sa",
       quiet = TRUE
-    ),
-    class = "read_cbs_index_unsupported"
+    )
+  )
+})
+
+test_that("invalid path, year, col_names and quiet error", {
+  path <- system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni")
+  expect_snapshot(error = TRUE, read_cbs_index(c("a", "b"), 2019, "ses"))
+  expect_snapshot(error = TRUE, read_cbs_index("nonexistent.xlsx", 2019, "ses"))
+  expect_snapshot(error = TRUE, read_cbs_index(path, "2019", "ses"))
+  expect_snapshot(error = TRUE, read_cbs_index(path, NA_real_, "ses"))
+  expect_snapshot(error = TRUE, read_cbs_index(path, 2019, "ses", col_names = 1))
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_index(path, 2019, "ses", quiet = "yes")
+  )
+})
+
+test_that("col_names length must match the selected columns", {
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_index(
+      system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni"),
+      2019,
+      "ses",
+      cols = c(1, 2),
+      col_names = "only_one",
+      quiet = TRUE
+    )
   )
 })

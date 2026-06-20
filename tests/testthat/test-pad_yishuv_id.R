@@ -23,13 +23,13 @@ test_that("pad_yishuv_id() handles NA correctly", {
 })
 
 test_that("pad_yishuv_id() throws an error when input is too long", {
-  expect_error(pad_yishuv_id("12345"), class = "pad_yishuv_id_too_long")
-  expect_error(pad_yishuv_id(12345), class = "pad_yishuv_id_too_long")
-  expect_error(pad_yishuv_id(c(1, 2, 12345)), class = "pad_yishuv_id_too_long")
+  expect_snapshot(error = TRUE, pad_yishuv_id("12345"))
+  expect_snapshot(error = TRUE, pad_yishuv_id(12345))
+  expect_snapshot(error = TRUE, pad_yishuv_id(c(1, 2, 12345)))
 })
 
 test_that("pad_yishuv_id() throws an error when input is not character or numeric", {
-  expect_error(pad_yishuv_id(TRUE), class = "pad_yishuv_id_invalid_type")
-  expect_error(pad_yishuv_id(list(1, 2, 3)), class = "pad_yishuv_id_invalid_type")
-  expect_error(pad_yishuv_id(factor(c("1", "2"))), class = "pad_yishuv_id_invalid_type")
+  expect_snapshot(error = TRUE, pad_yishuv_id(TRUE))
+  expect_snapshot(error = TRUE, pad_yishuv_id(list(1, 2, 3)))
+  expect_snapshot(error = TRUE, pad_yishuv_id(factor(c("1", "2"))))
 })

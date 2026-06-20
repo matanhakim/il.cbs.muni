@@ -78,76 +78,15 @@ test_that("drop_summary_rows is a no-op without a symbol column", {
   expect_equal(drop_summary_rows(df, symbol_col = 2), df)
 })
 
-test_that("throws error for invalid keep_summary_rows", {
-  expect_error(
-    read_cbs_muni(
-      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
-      year = 2021,
-      data_domain = "physical",
-      keep_summary_rows = "yes"
-    ),
-    class = "read_cbs_muni_invalid_keep_summary_rows"
+test_that("drop_summary_rows treats whitespace-only symbols as summary rows", {
+  df <- data.frame(
+    name = c("total", "אום אל-פחם", "אופקים"),
+    symbol = c("  ", "2710", "0031"),
+    stringsAsFactors = FALSE
   )
-})
-
-test_that("throws an informative error for an unsupported year", {
-  expect_error(
-    read_cbs_muni(
-      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
-      year = 1990,
-      data_domain = "physical"
-    ),
-    class = "read_cbs_muni_unsupported"
-  )
-})
-
-test_that("throws error for invalid path", {
-  expect_error(
-    read_cbs_muni(
-      "nonexistent_file.xlsx",
-      year = 2021,
-      data_domain = "physical"
-    ),
-    class = "read_cbs_muni_path_not_found"
-  )
-
-  expect_error(
-    read_cbs_muni(
-      c("file1.xlsx", "file2.xlsx"),
-      year = 2021,
-      data_domain = "physical"
-    ),
-    class = "read_cbs_muni_invalid_path"
-  )
-})
-
-test_that("throws error for invalid year", {
-  expect_error(
-    read_cbs_muni(
-      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
-      year = "2021",
-      data_domain = "physical"
-    ),
-    class = "read_cbs_muni_invalid_year"
-  )
-
-  expect_error(
-    read_cbs_muni(
-      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
-      year = c(2021, 2022),
-      data_domain = "physical"
-    ),
-    class = "read_cbs_muni_invalid_year"
-  )
-
-  expect_error(
-    read_cbs_muni(
-      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
-      year = NA_real_,
-      data_domain = "physical"
-    ),
-    class = "read_cbs_muni_invalid_year"
-  )
+  out <- drop_summary_rows(df, symbol_col = 2)
+  expect_equal(nrow(out), 2)
+  expect_equal(out[[2]], c("2710", "0031"))
 })
 
 test_that("reads the labor force and social survey domains", {
@@ -160,39 +99,15 @@ test_that("reads the labor force and social survey domains", {
   expect_equal(ncol(ss), 7)
 })
 
-test_that("the summary domain is unsupported from 2022 onwards", {
-  expect_error(
-    read_cbs_muni(
-      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
-      year = 2024,
-      data_domain = "summary"
-    ),
-    class = "read_cbs_muni_unsupported"
+test_that("applies valid col_names", {
+  df <- read_cbs_muni(
+    system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+    year = 2021,
+    data_domain = "physical",
+    cols = c(1, 2, 3),
+    col_names = c("name", "symbol", "district")
   )
-})
-
-test_that("col_names length must match the selected columns", {
-  expect_error(
-    read_cbs_muni(
-      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
-      year = 2021,
-      data_domain = "physical",
-      cols = c(1, 2),
-      col_names = "only_one"
-    ),
-    class = "read_cbs_muni_col_names_length"
-  )
-})
-
-test_that("drop_summary_rows treats whitespace-only symbols as summary rows", {
-  df <- data.frame(
-    name = c("total", "אום אל-פחם", "אופקים"),
-    symbol = c("  ", "2710", "0031"),
-    stringsAsFactors = FALSE
-  )
-  out <- drop_summary_rows(df, symbol_col = 2)
-  expect_equal(nrow(out), 2)
-  expect_equal(out[[2]], c("2710", "0031"))
+  expect_equal(names(df), c("name", "symbol", "district"))
 })
 
 test_that("drops 2022+ aggregate summary rows end to end from a real-layout fixture", {
@@ -218,37 +133,97 @@ test_that("drops 2022+ aggregate summary rows end to end from a real-layout fixt
   expect_equal(nrow(bud_keep) - nrow(bud), 4)
 })
 
-test_that("applies valid col_names", {
-  df <- read_cbs_muni(
-    system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
-    year = 2021,
-    data_domain = "physical",
-    cols = c(1, 2, 3),
-    col_names = c("name", "symbol", "district")
+test_that("invalid keep_summary_rows errors", {
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = 2021,
+      data_domain = "physical",
+      keep_summary_rows = "yes"
+    )
   )
-  expect_equal(names(df), c("name", "symbol", "district"))
+})
+
+test_that("an unsupported year errors informatively", {
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = 1990,
+      data_domain = "physical"
+    )
+  )
+})
+
+test_that("the summary domain is unsupported from 2022 onwards", {
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = 2024,
+      data_domain = "summary"
+    )
+  )
 })
 
 test_that("an unsupported muni_type/data_domain combination errors", {
-  expect_error(
+  expect_snapshot(
+    error = TRUE,
     read_cbs_muni(
       system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
       year = 2099,
       muni_type = "rc",
       data_domain = "social_survey"
-    ),
-    class = "read_cbs_muni_unsupported"
+    )
   )
 })
 
-test_that("throws error for invalid col_names", {
-  expect_error(
+test_that("invalid path errors", {
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_muni("nonexistent_file.xlsx", year = 2021, data_domain = "physical")
+  )
+  expect_snapshot(
+    error = TRUE,
     read_cbs_muni(
-      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      c("file1.xlsx", "file2.xlsx"),
+      year = 2021,
+      data_domain = "physical"
+    )
+  )
+})
+
+test_that("invalid year errors", {
+  path <- system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni")
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_muni(path, year = "2021", data_domain = "physical")
+  )
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_muni(path, year = c(2021, 2022), data_domain = "physical")
+  )
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_muni(path, year = NA_real_, data_domain = "physical")
+  )
+})
+
+test_that("invalid col_names errors", {
+  path <- system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni")
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_muni(path, year = 2021, data_domain = "physical", col_names = 123)
+  )
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_muni(
+      path,
       year = 2021,
       data_domain = "physical",
-      col_names = 123
-    ),
-    class = "read_cbs_muni_invalid_col_names"
+      cols = c(1, 2),
+      col_names = "only_one"
+    )
   )
 })

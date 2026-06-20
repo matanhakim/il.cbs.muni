@@ -50,6 +50,8 @@ test_that("recycling works", {
 })
 
 test_that("throws error for invalid rc_code", {
+  # `rc_code` is validated by rlang::arg_match(); assert the class rather than
+  # snapshotting rlang-owned message text.
   expect_error(
     modify_muni_id("38", "1234", rc_code = "xxx"),
     class = "rlang_error"
@@ -57,27 +59,12 @@ test_that("throws error for invalid rc_code", {
 })
 
 test_that("throws error for invalid input types", {
-  expect_error(
-    modify_muni_id(TRUE, "1234"),
-    class = "modify_muni_id_invalid_muni_type"
-  )
-  expect_error(
-    modify_muni_id("0", TRUE),
-    class = "modify_muni_id_invalid_yishuv_type"
-  )
-  expect_error(
-    modify_muni_id(list(1), "1234"),
-    class = "modify_muni_id_invalid_muni_type"
-  )
+  expect_snapshot(error = TRUE, modify_muni_id(TRUE, "1234"))
+  expect_snapshot(error = TRUE, modify_muni_id("0", TRUE))
+  expect_snapshot(error = TRUE, modify_muni_id(list(1), "1234"))
 })
 
 test_that("throws error for length mismatch", {
-  expect_error(
-    modify_muni_id(c(0, 99), c("100", "200", "300")),
-    class = "modify_muni_id_length_mismatch"
-  )
-  expect_error(
-    modify_muni_id(c(0, 99, 10), c("100", "200")),
-    class = "modify_muni_id_length_mismatch"
-  )
+  expect_snapshot(error = TRUE, modify_muni_id(c(0, 99), c("100", "200", "300")))
+  expect_snapshot(error = TRUE, modify_muni_id(c(0, 99, 10), c("100", "200")))
 })

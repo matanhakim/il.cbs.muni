@@ -1,43 +1,35 @@
 test_that("throws error for invalid input types", {
   df_1 <- data.frame(a = 1:3, b = 4:6)
-  
-  expect_error(
-    row_to_names_fill("not_a_df", 1),
-    class = "row_to_names_fill_invalid_data"
-  )
-  
-  expect_error(
-    row_to_names_fill(df_1, "not_numeric"),
-    class = "row_to_names_fill_invalid_row_number"
-  )
-  
-  expect_error(
-    row_to_names_fill(df_1, 1, fill_missing = "not_logical"),
-    class = "row_to_names_fill_invalid_fill_missing"
+  expect_snapshot(error = TRUE, row_to_names_fill("not_a_df", 1))
+  expect_snapshot(error = TRUE, row_to_names_fill(df_1, "not_numeric"))
+  expect_snapshot(
+    error = TRUE,
+    row_to_names_fill(df_1, 1, fill_missing = "not_logical")
   )
 })
 
 test_that("throws error for out of range row numbers", {
   df_1 <- data.frame(a = 1:3, b = 4:6)
-  
-  expect_error(
-    row_to_names_fill(df_1, 10),
-    class = "row_to_names_fill_row_out_of_bounds"
-  )
-  
-  expect_error(
-    row_to_names_fill(df_1, 0),
-    class = "row_to_names_fill_row_out_of_bounds"
-  )
+  expect_snapshot(error = TRUE, row_to_names_fill(df_1, 10))
+  expect_snapshot(error = TRUE, row_to_names_fill(df_1, 0))
 })
 
 test_that("throws error for length mismatch", {
   df_1 <- data.frame(a = 1:3, b = 4:6)
-  
-  expect_error(
-    row_to_names_fill(df_1, 1:2, fill_missing = c(TRUE, FALSE, TRUE)),
-    class = "row_to_names_fill_length_mismatch"
+  expect_snapshot(
+    error = TRUE,
+    row_to_names_fill(df_1, 1:2, fill_missing = c(TRUE, FALSE, TRUE))
   )
+})
+
+test_that("validates remove_row, remove_rows_above and sep", {
+  df_1 <- data.frame(a = 1:3, b = 4:6)
+  expect_snapshot(error = TRUE, row_to_names_fill(df_1, 1, remove_row = "yes"))
+  expect_snapshot(
+    error = TRUE,
+    row_to_names_fill(df_1, 1, remove_rows_above = NA)
+  )
+  expect_snapshot(error = TRUE, row_to_names_fill(df_1, 1, sep = 1))
 })
 
 test_that("fill and cast rows to names of a data frame", {
@@ -72,21 +64,5 @@ test_that("fill and cast rows to names of a data frame in a real data set", {
   expect_equal(
     row_to_names_fill(df_1, 4:5, fill_missing = c(TRUE, FALSE)) |> names() |> dplyr::nth(22),
     "אחוז באוכלוסייה בסוף השנה_בני 4-0"
-  )
-})
-
-test_that("validates remove_row, remove_rows_above and sep", {
-  df_1 <- data.frame(a = 1:3, b = 4:6)
-  expect_error(
-    row_to_names_fill(df_1, 1, remove_row = "yes"),
-    class = "row_to_names_fill_invalid_remove_row"
-  )
-  expect_error(
-    row_to_names_fill(df_1, 1, remove_rows_above = NA),
-    class = "row_to_names_fill_invalid_remove_rows_above"
-  )
-  expect_error(
-    row_to_names_fill(df_1, 1, sep = 1),
-    class = "row_to_names_fill_invalid_sep"
   )
 })

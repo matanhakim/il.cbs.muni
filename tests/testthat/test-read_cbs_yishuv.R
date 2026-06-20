@@ -6,34 +6,37 @@ test_that("Reading a yishuvim file works", {
   expect_equal(df |> nrow(), 1483)
 })
 
-test_that("throws error for invalid path", {
-  expect_error(
-    read_cbs_yishuv("nonexistent_file.xlsx"),
-    class = "read_cbs_yishuv_path_not_found"
+test_that("applies valid col_names", {
+  df <- read_cbs_yishuv(
+    system.file("extdata", "bycode2021.xlsx", package = "il.cbs.muni"),
+    cols = c(1, 2),
+    col_names = c("name", "id")
   )
-  expect_error(
-    read_cbs_yishuv(c("file1.xlsx", "file2.xlsx")),
-    class = "read_cbs_yishuv_invalid_path"
+  expect_equal(names(df), c("name", "id"))
+})
+
+test_that("invalid path errors", {
+  expect_snapshot(error = TRUE, read_cbs_yishuv("nonexistent_file.xlsx"))
+  expect_snapshot(error = TRUE, read_cbs_yishuv(c("file1.xlsx", "file2.xlsx")))
+})
+
+test_that("invalid col_names type errors", {
+  expect_snapshot(
+    error = TRUE,
+    read_cbs_yishuv(
+      system.file("extdata", "bycode2021.xlsx", package = "il.cbs.muni"),
+      col_names = 123
+    )
   )
 })
 
 test_that("col_names length must match the selected columns", {
-  expect_error(
+  expect_snapshot(
+    error = TRUE,
     read_cbs_yishuv(
       system.file("extdata", "bycode2021.xlsx", package = "il.cbs.muni"),
       cols = c(1, 2),
       col_names = "only_one"
-    ),
-    class = "read_cbs_yishuv_col_names_length"
+    )
   )
-})
-
-test_that("validates col_names type and applies valid col_names", {
-  path <- system.file("extdata", "bycode2021.xlsx", package = "il.cbs.muni")
-  expect_error(
-    read_cbs_yishuv(path, col_names = 123),
-    class = "read_cbs_yishuv_invalid_col_names"
-  )
-  df <- read_cbs_yishuv(path, cols = c(1, 2), col_names = c("name", "id"))
-  expect_equal(names(df), c("name", "id"))
 })

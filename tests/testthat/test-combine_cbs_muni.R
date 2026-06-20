@@ -14,67 +14,16 @@ test_that("combine a municipal data frame well", {
 
   expect_equal(
     df_1 |> names(),
-    c("שם הרשות", "סמל הרשות 2009", "מחוז 2009",
-      "מעמד מוניציפלי 2009", "מרחק מגבול מחוז תל אביב (ק\"מ) 2004",
-      "שנת קבלת מעמד מוניציפלי", "מספר חברי מועצה 2008",
-      "סה\"כ אוכלוסייה בסוף 2009 (אלפים)")
-  )
-})
-
-test_that("throws error for invalid path", {
-  expect_error(
-    combine_cbs_muni(
-      "nonexistent_file.xls",
-      year = 2009,
-      cols_city = 1:5,
-      cols_rc = 1:5
-    ),
-    class = "read_cbs_muni_path_not_found"
-  )
-  
-  expect_error(
-    combine_cbs_muni(
-      c("file1.xls", "file2.xls"),
-      year = 2009,
-      cols_city = 1:5,
-      cols_rc = 1:5
-    ),
-    class = "combine_cbs_muni_invalid_path"
-  )
-})
-
-test_that("throws error for invalid year", {
-  expect_error(
-    combine_cbs_muni(
-      system.file("extdata", "2009.xls", package = "il.cbs.muni"),
-      year = "2009",
-      cols_city = 1:5,
-      cols_rc = 1:5
-    ),
-    class = "combine_cbs_muni_invalid_year"
-  )
-  
-  expect_error(
-    combine_cbs_muni(
-      system.file("extdata", "2009.xls", package = "il.cbs.muni"),
-      year = c(2009, 2010),
-      cols_city = 1:5,
-      cols_rc = 1:5
-    ),
-    class = "combine_cbs_muni_invalid_year"
-  )
-})
-
-test_that("throws error for invalid col_names", {
-  expect_error(
-    combine_cbs_muni(
-      system.file("extdata", "2009.xls", package = "il.cbs.muni"),
-      year = 2009,
-      cols_city = 1:5,
-      cols_rc = 1:5,
-      col_names = 123
-    ),
-    class = "combine_cbs_muni_invalid_col_names"
+    c(
+      "שם הרשות",
+      "סמל הרשות 2009",
+      "מחוז 2009",
+      "מעמד מוניציפלי 2009",
+      "מרחק מגבול מחוז תל אביב (ק\"מ) 2004",
+      "שנת קבלת מעמד מוניציפלי",
+      "מספר חברי מועצה 2008",
+      "סה\"כ אוכלוסייה בסוף 2009 (אלפים)"
+    )
   )
 })
 
@@ -103,37 +52,83 @@ test_that("explicit col_names override both sheets", {
   expect_equal(names(df), c("name", "symbol", "district"))
 })
 
-test_that("errors when cols_city and cols_rc select different numbers of columns", {
-  expect_error(
+test_that("invalid path errors", {
+  expect_snapshot(
+    error = TRUE,
+    combine_cbs_muni(
+      "nonexistent_file.xls",
+      year = 2009,
+      cols_city = 1:5,
+      cols_rc = 1:5
+    )
+  )
+  expect_snapshot(
+    error = TRUE,
+    combine_cbs_muni(
+      c("file1.xls", "file2.xls"),
+      year = 2009,
+      cols_city = 1:5,
+      cols_rc = 1:5
+    )
+  )
+})
+
+test_that("invalid year errors", {
+  path <- system.file("extdata", "2009.xls", package = "il.cbs.muni")
+  expect_snapshot(
+    error = TRUE,
+    combine_cbs_muni(path, year = "2009", cols_city = 1:5, cols_rc = 1:5)
+  )
+  expect_snapshot(
+    error = TRUE,
+    combine_cbs_muni(path, year = c(2009, 2010), cols_city = 1:5, cols_rc = 1:5)
+  )
+})
+
+test_that("invalid col_names errors", {
+  expect_snapshot(
+    error = TRUE,
+    combine_cbs_muni(
+      system.file("extdata", "2009.xls", package = "il.cbs.muni"),
+      year = 2009,
+      cols_city = 1:5,
+      cols_rc = 1:5,
+      col_names = 123
+    )
+  )
+})
+
+test_that("mismatched cols_city / cols_rc length errors", {
+  expect_snapshot(
+    error = TRUE,
     combine_cbs_muni(
       system.file("extdata", "2009.xls", package = "il.cbs.muni"),
       year = 2009,
       cols_city = c(1, 2, 3),
       cols_rc = c(1, 2)
-    ),
-    class = "combine_cbs_muni_cols_length_mismatch"
+    )
   )
 })
 
-test_that("errors when the column selections are missing", {
-  expect_error(
+test_that("missing column selections error", {
+  expect_snapshot(
+    error = TRUE,
     combine_cbs_muni(
       system.file("extdata", "2009.xls", package = "il.cbs.muni"),
       year = 2009
-    ),
-    class = "combine_cbs_muni_missing_cols"
+    )
   )
 })
 
-test_that("errors when col_names length does not match the selected columns", {
-  expect_error(
+test_that("col_names length must match the selected columns", {
+  expect_snapshot(
+    error = TRUE,
     combine_cbs_muni(
       system.file("extdata", "2009.xls", package = "il.cbs.muni"),
       year = 2009,
       cols_city = 1:3,
       cols_rc = 1:3,
       col_names = c("a", "b")
-    ),
-    class = "combine_cbs_muni_col_names_length"
+    )
   )
 })
