@@ -11,8 +11,8 @@ pad_yishuv_id(yishuv_id)
 element is no longer than 4 characters or digits.}
 }
 \value{
-A character or numeric vector, where each element is 4 characters long,
-containing only numbers and left-padded with 0's.
+A character vector the same length as \code{yishuv_id}, where each element is
+4 characters long and left-padded with \code{"0"}.
 }
 \description{
 Pad a yishuv id to a 4-digit character vector

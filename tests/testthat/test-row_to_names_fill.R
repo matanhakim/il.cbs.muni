@@ -66,3 +66,19 @@ test_that("fill and cast rows to names of a data frame in a real data set", {
     "אחוז באוכלוסייה בסוף השנה_בני 4-0"
   )
 })
+
+test_that("row_number rejects NA and non-integer values informatively", {
+  df_1 <- data.frame(a = c("x", "y", "z"), b = c("p", "q", "r"))
+  expect_error(
+    row_to_names_fill(df_1, NA_real_),
+    class = "row_to_names_fill_invalid_row_number"
+  )
+  expect_error(
+    row_to_names_fill(df_1, c(2, NA)),
+    class = "row_to_names_fill_invalid_row_number"
+  )
+  expect_error(
+    row_to_names_fill(df_1, 2.5),
+    class = "row_to_names_fill_non_integer_row_number"
+  )
+})

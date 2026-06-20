@@ -68,3 +68,10 @@ test_that("throws error for length mismatch", {
   expect_snapshot(error = TRUE, modify_muni_id(c(0, 99), c("100", "200", "300")))
   expect_snapshot(error = TRUE, modify_muni_id(c(0, 99, 10), c("100", "200")))
 })
+
+test_that("a zero-length input returns a zero-length result", {
+  expect_identical(modify_muni_id(character(0), "1000"), character(0))
+  expect_identical(modify_muni_id("0", character(0)), character(0))
+  expect_identical(modify_muni_id(numeric(0), "1000"), character(0))
+  expect_identical(modify_muni_id(character(0), character(0)), character(0))
+})

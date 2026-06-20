@@ -227,3 +227,36 @@ test_that("invalid col_names errors", {
     )
   )
 })
+
+test_that("cols honors full tidy-select (by name, predicate, negative)", {
+  path <- system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni")
+  full <- read_cbs_muni(path, year = 2021, data_domain = "physical")
+  # a name copied verbatim from the output (it carries internal whitespace)
+  # must round-trip through `cols`
+  one <- read_cbs_muni(
+    path,
+    year = 2021,
+    data_domain = "physical",
+    cols = dplyr::all_of(names(full)[1])
+  )
+  expect_identical(names(one), names(full)[1])
+  # predicate: every output column is character by design
+  all_chr <- read_cbs_muni(
+    path,
+    year = 2021,
+    data_domain = "physical",
+    cols = dplyr::where(is.character)
+  )
+  expect_identical(ncol(all_chr), ncol(full))
+  # negative selection drops a column
+  neg <- read_cbs_muni(path, year = 2021, data_domain = "physical", cols = -1)
+  expect_identical(ncol(neg), ncol(full) - 1L)
+})
+
+test_that("a data domain whose sheet is absent errors informatively", {
+  fx <- test_path("fixtures", "muni_2024_sample.xlsx")
+  expect_error(
+    read_cbs_muni(fx, year = 2024, data_domain = "labor_force_survey"),
+    class = "read_cbs_muni_missing_sheet"
+  )
+})

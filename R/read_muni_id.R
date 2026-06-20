@@ -52,6 +52,13 @@ read_muni_id <- function(
     )
   }
 
+  if (length(id_types) < 1) {
+    rlang::abort(
+      "`id_types` must contain at least one value.",
+      class = "read_muni_id_invalid_id_types"
+    )
+  }
+
   valid_types <- c("muni", "edu", "tax")
   invalid_types <- setdiff(id_types, valid_types)
   if (length(invalid_types) > 0) {

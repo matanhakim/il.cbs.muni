@@ -159,6 +159,28 @@ read_cbs_muni <- function(
     )
   }
 
+  # The requested data domain maps to a specific sheet number. Guard against a
+  # file that does not contain that sheet (e.g. a file without the survey sheets)
+  # so the user gets an informative error rather than a low-level readxl one.
+  n_sheets <- length(readxl::excel_sheets(path))
+  if (params$sheet_number > n_sheets) {
+    rlang::abort(
+      c(
+        "The file does not contain the sheet required for this data domain.",
+        "i" = paste0(
+          "data_domain = \"",
+          data_domain,
+          "\" expects sheet ",
+          params$sheet_number,
+          "."
+        ),
+        "x" = paste0("The file has only ", n_sheets, " sheet(s)."),
+        "i" = "The file may not include this data domain or may use a different layout."
+      ),
+      class = "read_cbs_muni_missing_sheet"
+    )
+  }
+
   df <- readxl::read_excel(
     path = path,
     sheet = params$sheet_number,
@@ -172,6 +194,10 @@ read_cbs_muni <- function(
     ) |>
     janitor::remove_empty("rows", cutoff = 0.1)
 
+  # Clean the merged-header column names now, before any column selection, so that
+  # selecting `cols` by a column name matches the names returned to the user.
+  names(df) <- stringr::str_squish(names(df))
+
   # From 2022 the physical and budget sheets open with aggregate summary rows
   # (national total and one per municipal status) that carry no authority symbol
   # in the second column. Drop them unless the user asks to keep them, so every
@@ -182,7 +208,7 @@ read_cbs_muni <- function(
 
   if (!rlang::quo_is_null(rlang::enquo(cols))) {
     df <- df |>
-      dplyr::select(dplyr::all_of({{ cols }}))
+      dplyr::select({{ cols }})
   }
 
   if (!is.null(col_names)) {
@@ -197,10 +223,6 @@ read_cbs_muni <- function(
       )
     }
     names(df) <- col_names
-  } else {
-    names(df) <- df |>
-      names() |>
-      stringr::str_squish()
   }
 
   df

@@ -88,6 +88,13 @@ modify_muni_id <- function(
     )
   }
 
+  # A zero-length input yields a zero-length result. Standard recycling treats
+  # size 0 combined with size 1 as size 0; without this guard the `rep_len()`
+  # below would fabricate a length-1 NA.
+  if (len_muni == 0L || len_yishuv == 0L) {
+    return(character(0))
+  }
+
   if (is.numeric(muni_id)) muni_id <- as.character(muni_id)
   if (is.numeric(yishuv_id)) yishuv_id <- as.character(yishuv_id)
 

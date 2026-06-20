@@ -40,3 +40,12 @@ test_that("col_names length must match the selected columns", {
     )
   )
 })
+
+test_that("cols honors full tidy-select (predicate and negative)", {
+  path <- system.file("extdata", "bycode2021.xlsx", package = "il.cbs.muni")
+  full <- read_cbs_yishuv(path)
+  all_chr <- read_cbs_yishuv(path, cols = dplyr::where(is.character))
+  expect_identical(ncol(all_chr), ncol(full))
+  neg <- read_cbs_yishuv(path, cols = -1)
+  expect_identical(ncol(neg), ncol(full) - 1L)
+})

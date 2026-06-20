@@ -24,8 +24,9 @@
 #' @param sep A character vector of length 1 to separate the values in the case of
 #' multiple rows input to `row_number`.
 #'
-#' @return A data frame (class `data.frame`) with the same structure as the input `data`,
-#' but with column names derived from the specified row(s). The returned data frame
+#' @return A data frame with the same structure and class as the input `data` (a
+#' tibble in returns a tibble; a data.frame in returns a data.frame), with column
+#' names derived from the specified row(s). The returned data frame
 #' has the same number of columns as the input, with rows removed according to the
 #' `remove_row` and `remove_rows_above` parameters. All data types and values are
 #' preserved from the original data frame.
@@ -63,7 +64,27 @@ row_to_names_fill <- function(data, row_number, fill_missing = TRUE, remove_row 
         class = "row_to_names_fill_invalid_row_number"
       )
     }
-    
+
+    if (anyNA(row_number)) {
+      rlang::abort(
+        "`row_number` must not contain `NA`.",
+        class = "row_to_names_fill_invalid_row_number"
+      )
+    }
+
+    if (any(row_number != round(row_number))) {
+      rlang::abort(
+        c(
+          "`row_number` must contain whole numbers.",
+          "x" = paste0(
+            "Non-integer values: ",
+            paste(row_number[row_number != round(row_number)], collapse = ", ")
+          )
+        ),
+        class = "row_to_names_fill_non_integer_row_number"
+      )
+    }
+
     if (any(row_number < 1 | row_number > nrow(data), na.rm = TRUE)) {
       rlang::abort(
         c(

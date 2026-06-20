@@ -108,7 +108,7 @@ combine_cbs_muni <- function(
     year = {{ year }},
     muni_type = "city_lc",
     data_domain =  {{ data_domain }},
-    cols = cols_city
+    cols = {{ cols_city }}
   )
 
   df_rc <- read_cbs_muni(
@@ -116,7 +116,7 @@ combine_cbs_muni <- function(
     year = {{ year }},
     muni_type = "rc",
     data_domain =  {{ data_domain }},
-    cols = cols_rc
+    cols = {{ cols_rc }}
   )
 
   # Columns are matched by position, so the two sheets must contribute the same

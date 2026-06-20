@@ -13,6 +13,11 @@
 * `read_cbs_muni()` drops the aggregate summary rows (national total and per municipal-status subtotals) that CBS added to the physical and budget sheets from 2022 onwards, so every returned row is a single municipality as documented; set the new experimental `keep_summary_rows = TRUE` to keep them.
 * `read_cbs_muni()` now raises an informative error that lists the supported years when called with an unsupported year, muni_type or data_domain combination.
 * `read_muni_id()` now returns 257 local authorities, adding the local councils צור הדסה and שער שומרון (these are administered under their parent authorities by the Ministry of Education, so their education symbol is `NA`).
+* `read_cbs_muni()`, `read_cbs_index()` and `read_cbs_yishuv()` now honour the full tidy-select grammar in `cols` as documented: selecting a column by its (post-cleaning) name, by a predicate such as `where(is.character)`, or by negative position now works. Column names are cleaned before selection so a name copied from the output round-trips.
+* `read_cbs_muni()` now raises an informative error when the requested `data_domain` maps to a sheet the file does not contain (for example a file without the survey sheets), instead of surfacing a low-level readxl error.
+* `read_muni_id()` now errors when `id_types` is empty, instead of returning a tibble with no columns.
+* `modify_muni_id()` now returns a zero-length result for a zero-length input, instead of fabricating a length-1 `NA`.
+* `row_to_names_fill()` now rejects `NA` and non-integer values in `row_number` with an informative error, instead of failing with an internal message.
 
 # il.cbs.muni 0.1.0
 

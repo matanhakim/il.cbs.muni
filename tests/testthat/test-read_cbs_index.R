@@ -181,3 +181,18 @@ test_that("col_names length must match the selected columns", {
     )
   )
 })
+
+test_that("cols honors full tidy-select (predicate and negative)", {
+  path <- system.file("extdata", "24_22_375t1.xlsx", package = "il.cbs.muni")
+  full <- read_cbs_index(path, 2019, "ses", quiet = TRUE)
+  all_chr <- read_cbs_index(
+    path,
+    2019,
+    "ses",
+    quiet = TRUE,
+    cols = dplyr::where(is.character)
+  )
+  expect_identical(ncol(all_chr), ncol(full))
+  neg <- read_cbs_index(path, 2019, "ses", quiet = TRUE, cols = -1)
+  expect_identical(ncol(neg), ncol(full) - 1L)
+})

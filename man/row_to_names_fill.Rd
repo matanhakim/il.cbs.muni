@@ -38,8 +38,9 @@ from the resulting data.frame, in the case that \code{row_number != 1}.}
 multiple rows input to \code{row_number}.}
 }
 \value{
-A data frame (class \code{data.frame}) with the same structure as the input \code{data},
-but with column names derived from the specified row(s). The returned data frame
+A data frame with the same structure and class as the input \code{data} (a
+tibble in returns a tibble; a data.frame in returns a data.frame), with column
+names derived from the specified row(s). The returned data frame
 has the same number of columns as the input, with rows removed according to the
 \code{remove_row} and \code{remove_rows_above} parameters. All data types and values are
 preserved from the original data frame.

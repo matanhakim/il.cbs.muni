@@ -214,9 +214,13 @@ read_cbs_index <- function(
     ) |>
     janitor::remove_empty("rows", cutoff = 0.2)
 
+  # Clean the merged-header column names before any selection so that selecting
+  # `cols` by a column name matches the names returned to the user.
+  names(df) <- stringr::str_squish(names(df))
+
   if (!rlang::quo_is_null(rlang::enquo(cols))) {
     df <- df |>
-      dplyr::select(dplyr::all_of({{ cols }}))
+      dplyr::select({{ cols }})
   }
 
   if (!is.null(col_names)) {
@@ -231,10 +235,6 @@ read_cbs_index <- function(
       )
     }
     names(df) <- col_names
-  } else {
-    names(df) <- df |>
-      names() |>
-      stringr::str_squish()
   }
 
   attr(df, "unit_type") <- unit_type

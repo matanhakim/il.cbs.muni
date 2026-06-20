@@ -3,8 +3,8 @@
 #' @param yishuv_id a character vector containing only characters and numbers, where each
 #' element is no longer than 4 characters or digits.
 #'
-#' @return A character or numeric vector, where each element is 4 characters long,
-#' containing only numbers and left-padded with 0's.
+#' @return A character vector the same length as `yishuv_id`, where each element is
+#' 4 characters long and left-padded with `"0"`.
 #' @export
 #'
 #' @examples

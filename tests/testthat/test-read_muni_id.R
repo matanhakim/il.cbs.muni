@@ -19,3 +19,10 @@ test_that("read_muni_id() validates id_types and include_names", {
   expect_snapshot(error = TRUE, read_muni_id(include_names = "yes"))
   expect_snapshot(error = TRUE, read_muni_id(include_names = NA))
 })
+
+test_that("empty id_types errors instead of returning a 0-column tibble", {
+  expect_error(
+    read_muni_id(character(0)),
+    class = "read_muni_id_invalid_id_types"
+  )
+})

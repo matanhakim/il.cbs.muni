@@ -69,9 +69,13 @@ read_cbs_yishuv <- function(path, cols = NULL, col_names = NULL) {
     col_types = "text"
   )
 
+  # Clean the column names before any selection so that selecting `cols` by a
+  # column name matches the names returned to the user.
+  names(df) <- stringr::str_squish(names(df))
+
   if (!rlang::quo_is_null(rlang::enquo(cols))) {
     df <- df |>
-      dplyr::select(dplyr::all_of({{ cols }}))
+      dplyr::select({{ cols }})
   }
 
   if (!is.null(col_names)) {
@@ -86,10 +90,6 @@ read_cbs_yishuv <- function(path, cols = NULL, col_names = NULL) {
       )
     }
     names(df) <- col_names
-  } else {
-    names(df) <- df |>
-      names() |>
-      stringr::str_squish()
   }
 
   df
