@@ -60,12 +60,12 @@ row_to_names_fill(
 
 ## Value
 
-A data frame (class `data.frame`) with the same structure as the input
-`data`, but with column names derived from the specified row(s). The
-returned data frame has the same number of columns as the input, with
-rows removed according to the `remove_row` and `remove_rows_above`
-parameters. All data types and values are preserved from the original
-data frame.
+A data frame with the same structure and class as the input `data` (a
+tibble in returns a tibble; a data.frame in returns a data.frame), with
+column names derived from the specified row(s). The returned data frame
+has the same number of columns as the input, with rows removed according
+to the `remove_row` and `remove_rows_above` parameters. All data types
+and values are preserved from the original data frame.
 
 ## Examples
 

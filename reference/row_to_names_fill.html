@@ -102,8 +102,9 @@ multiple rows input to <code>row_number</code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data frame (class <code>data.frame</code>) with the same structure as the input <code>data</code>,
-but with column names derived from the specified row(s). The returned data frame
+    <p>A data frame with the same structure and class as the input <code>data</code> (a
+tibble in returns a tibble; a data.frame in returns a data.frame), with column
+names derived from the specified row(s). The returned data frame
 has the same number of columns as the input, with rows removed according to the
 <code>remove_row</code> and <code>remove_rows_above</code> parameters. All data types and values are
 preserved from the original data frame.</p>

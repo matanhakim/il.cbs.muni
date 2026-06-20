@@ -60,6 +60,16 @@
 <code><a href="../reference/read_cbs_muni.html">read_cbs_muni()</a></code> now raises an informative error that lists the supported years when called with an unsupported year, muni_type or data_domain combination.</li>
 <li>
 <code><a href="../reference/read_muni_id.html">read_muni_id()</a></code> now returns 257 local authorities, adding the local councils צור הדסה and שער שומרון (these are administered under their parent authorities by the Ministry of Education, so their education symbol is <code>NA</code>).</li>
+<li>
+<code><a href="../reference/read_cbs_muni.html">read_cbs_muni()</a></code>, <code><a href="../reference/read_cbs_index.html">read_cbs_index()</a></code> and <code><a href="../reference/read_cbs_yishuv.html">read_cbs_yishuv()</a></code> now honour the full tidy-select grammar in <code>cols</code> as documented: selecting a column by its (post-cleaning) name, by a predicate such as <code>where(is.character)</code>, or by negative position now works. Column names are cleaned before selection so a name copied from the output round-trips.</li>
+<li>
+<code><a href="../reference/read_cbs_muni.html">read_cbs_muni()</a></code> now raises an informative error when the requested <code>data_domain</code> maps to a sheet the file does not contain (for example a file without the survey sheets), instead of surfacing a low-level readxl error.</li>
+<li>
+<code><a href="../reference/read_muni_id.html">read_muni_id()</a></code> now errors when <code>id_types</code> is empty, instead of returning a tibble with no columns.</li>
+<li>
+<code><a href="../reference/modify_muni_id.html">modify_muni_id()</a></code> now returns a zero-length result for a zero-length input, instead of fabricating a length-1 <code>NA</code>.</li>
+<li>
+<code><a href="../reference/row_to_names_fill.html">row_to_names_fill()</a></code> now rejects <code>NA</code> and non-integer values in <code>row_number</code> with an informative error, instead of failing with an internal message.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="ilcbsmuni-010">il.cbs.muni 0.1.0<a class="anchor" aria-label="anchor" href="#ilcbsmuni-010"></a></h2><p class="text-muted">CRAN release: 2026-02-12</p>

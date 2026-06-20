@@ -17,8 +17,8 @@ pad_yishuv_id(yishuv_id)
 
 ## Value
 
-A character or numeric vector, where each element is 4 characters long,
-containing only numbers and left-padded with 0's.
+A character vector the same length as `yishuv_id`, where each element is
+4 characters long and left-padded with `"0"`.
 
 ## Examples
 
