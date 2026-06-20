@@ -7,6 +7,7 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/il.cbs.muni)](https://CRAN.R-project.org/package=il.cbs.muni)
+[![R-CMD-check](https://github.com/matanhakim/il.cbs.muni/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/matanhakim/il.cbs.muni/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
