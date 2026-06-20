@@ -124,3 +124,16 @@ test_that("errors when the column selections are missing", {
     class = "combine_cbs_muni_missing_cols"
   )
 })
+
+test_that("errors when col_names length does not match the selected columns", {
+  expect_error(
+    combine_cbs_muni(
+      system.file("extdata", "2009.xls", package = "il.cbs.muni"),
+      year = 2009,
+      cols_city = 1:3,
+      cols_rc = 1:3,
+      col_names = c("a", "b")
+    ),
+    class = "combine_cbs_muni_col_names_length"
+  )
+})

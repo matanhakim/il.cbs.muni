@@ -182,3 +182,16 @@ test_that("cols selects and col_names renames; mismatched length errors", {
     class = "read_cbs_index_col_names_length"
   )
 })
+
+test_that("an unsupported index_type/unit_type combination errors", {
+  expect_error(
+    read_cbs_index(
+      system.file("extdata", "24_22_420t1.xlsx", package = "il.cbs.muni"),
+      year = 2099,
+      index_type = "peri",
+      unit_type = "sa",
+      quiet = TRUE
+    ),
+    class = "read_cbs_index_unsupported"
+  )
+})

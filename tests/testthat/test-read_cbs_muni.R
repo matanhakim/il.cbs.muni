@@ -218,6 +218,29 @@ test_that("drops 2022+ aggregate summary rows end to end from a real-layout fixt
   expect_equal(nrow(bud_keep) - nrow(bud), 4)
 })
 
+test_that("applies valid col_names", {
+  df <- read_cbs_muni(
+    system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+    year = 2021,
+    data_domain = "physical",
+    cols = c(1, 2, 3),
+    col_names = c("name", "symbol", "district")
+  )
+  expect_equal(names(df), c("name", "symbol", "district"))
+})
+
+test_that("an unsupported muni_type/data_domain combination errors", {
+  expect_error(
+    read_cbs_muni(
+      system.file("extdata", "p_libud_2021.xlsx", package = "il.cbs.muni"),
+      year = 2099,
+      muni_type = "rc",
+      data_domain = "social_survey"
+    ),
+    class = "read_cbs_muni_unsupported"
+  )
+})
+
 test_that("throws error for invalid col_names", {
   expect_error(
     read_cbs_muni(

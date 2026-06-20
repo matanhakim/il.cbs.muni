@@ -74,3 +74,19 @@ test_that("fill and cast rows to names of a data frame in a real data set", {
     "אחוז באוכלוסייה בסוף השנה_בני 4-0"
   )
 })
+
+test_that("validates remove_row, remove_rows_above and sep", {
+  df_1 <- data.frame(a = 1:3, b = 4:6)
+  expect_error(
+    row_to_names_fill(df_1, 1, remove_row = "yes"),
+    class = "row_to_names_fill_invalid_remove_row"
+  )
+  expect_error(
+    row_to_names_fill(df_1, 1, remove_rows_above = NA),
+    class = "row_to_names_fill_invalid_remove_rows_above"
+  )
+  expect_error(
+    row_to_names_fill(df_1, 1, sep = 1),
+    class = "row_to_names_fill_invalid_sep"
+  )
+})

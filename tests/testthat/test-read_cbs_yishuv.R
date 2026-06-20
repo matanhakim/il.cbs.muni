@@ -27,3 +27,13 @@ test_that("col_names length must match the selected columns", {
     class = "read_cbs_yishuv_col_names_length"
   )
 })
+
+test_that("validates col_names type and applies valid col_names", {
+  path <- system.file("extdata", "bycode2021.xlsx", package = "il.cbs.muni")
+  expect_error(
+    read_cbs_yishuv(path, col_names = 123),
+    class = "read_cbs_yishuv_invalid_col_names"
+  )
+  df <- read_cbs_yishuv(path, cols = c(1, 2), col_names = c("name", "id"))
+  expect_equal(names(df), c("name", "id"))
+})
